@@ -10,43 +10,23 @@ import React from "react";
 
 export const data = [
   {
-    title: "Users",
+    title: "Dashboard",
     icon: <HomeIcon />,
-    link: "/",
+    link: "/admin",
   },
   {
-    title: "Medias",
+    title: "Providers",
     icon: <MediaIcon />,
-    link: "/admin/medias",
+    link: "/admin/Providers",
   },
   {
-    title: "Contacts",
+    title: "Departments",
     icon: <ContactIcon />,
-    link: "/admin/contacts",
+    link: "/admin/departments",
   },
   {
-    title: "Servers",
+    title: "Doctors",
     icon: <ServerIcon />,
-    link: "/admin/servers",
-  },
-  {
-    title: "Settings",
-    icon: <SettingsIcon />,
-    link: "/admin/settings",
-  },
-  {
-    title: "Terminal",
-    icon: <TerminalIcon />,
-    link: "/admin/terminal",
-  },
-  {
-    title: "Recycle Bin",
-    icon: <RecycleBinIcon />,
-    link: "/admin/recycle-bin",
-  },
-  {
-    title: "Documentation",
-    icon: <DocIcon />,
-    link: "/admin/documentation",
+    link: "/admin/doctors",
   },
 ];

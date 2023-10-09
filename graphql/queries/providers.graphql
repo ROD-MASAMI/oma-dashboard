@@ -1,0 +1,71 @@
+query HealthProviders($paging: CursorPaging!, $filter: HealthProviderFilter!) {
+  healthProviders(paging: $paging, filter: $filter) {
+    edges {
+      cursor
+      node {
+        id
+        district
+        description
+        name
+        region
+        type
+        location {
+          latitude
+          longitude
+        }
+        doctors {
+          doctorType {
+            id
+            name
+          }
+          price
+          id
+          ratings
+          location
+          userProfile {
+            id
+            lastName
+            middleName
+            phoneNumber
+            email
+            gender
+            firstName
+          }
+          bio
+        }
+        departments {
+          code
+          id
+          name
+          updatedAt
+          doctors {
+            nodes {
+              bio
+              availabilities {
+                createdAt
+                dayOfWeek
+                deletedAt
+                doctorId
+                endTime
+                id
+                startTime
+                updatedAt
+              }
+              doctorType {
+                id
+                name
+                code
+              }
+              price
+              ratings
+              id
+              location
+              updatedAt
+            }
+          }
+        }
+      }
+    }
+    totalCount
+  }
+}

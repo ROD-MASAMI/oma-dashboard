@@ -1,0 +1,25 @@
+query Doctors($filter: DoctorFilter!) {
+  doctors(filter: $filter) {
+    bio
+    availabilities {
+      createdAt
+      dayOfWeek
+      deletedAt
+      doctorId
+      endTime
+      id
+      startTime
+      updatedAt
+    }
+    doctorType {
+      id
+      name
+      code
+    }
+    price
+    ratings
+    id
+    location
+    updatedAt
+  }
+}
