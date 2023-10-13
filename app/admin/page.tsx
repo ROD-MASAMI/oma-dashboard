@@ -8,12 +8,12 @@ const page = () => {
       <div className="mb-6 w-full pr-2 md:w-4/12">
         <div className="rounded-2xl bg-white p-4 shadow">
           <div className="flex items-center">
-            <span className="relative rounded-xl bg-purple-200 p-4">
+            <span className="relative rounded-xl bg-[#1EAEA2] p-4">
               <svg
                 width="40"
                 fill="currentColor"
                 height="40"
-                className="absolute left-1/2 top-1/2 h-4 -translate-x-1/2 -translate-y-1/2 text-purple-500"
+                className="absolute left-1/2 top-1/2 h-4 -translate-x-1/2 -translate-y-1/2 text-white"
                 viewBox="0 0 1792 1792"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -32,12 +32,12 @@ const page = () => {
       <div className="mb-6 w-full pr-2 md:w-4/12">
         <div className="rounded-2xl bg-white p-4 shadow">
           <div className="flex items-center">
-            <span className="relative rounded-xl bg-purple-200 p-4">
+            <span className="relative rounded-xl bg-[#1EAEA2] p-4">
               <svg
                 width="40"
                 fill="currentColor"
                 height="40"
-                className="absolute left-1/2 top-1/2 h-4 -translate-x-1/2 -translate-y-1/2 text-purple-500"
+                className="absolute left-1/2 top-1/2 h-4 -translate-x-1/2 -translate-y-1/2 text-white"
                 viewBox="0 0 1792 1792"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -56,12 +56,12 @@ const page = () => {
       <div className="w-full md:w-4/12">
         <div className="rounded-2xl bg-white p-4 shadow">
           <div className="flex items-center">
-            <span className="relative rounded-xl bg-purple-200 p-4">
+            <span className="relative rounded-xl bg-[#1EAEA2] p-4">
               <svg
                 width="40"
                 fill="currentColor"
                 height="40"
-                className="absolute left-1/2 top-1/2 h-4 -translate-x-1/2 -translate-y-1/2 text-purple-500"
+                className="absolute left-1/2 top-1/2 h-4 -translate-x-1/2 -translate-y-1/2 text-white"
                 viewBox="0 0 1792 1792"
                 xmlns="http://www.w3.org/2000/svg"
               >

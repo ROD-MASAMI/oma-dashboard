@@ -1,0 +1,10 @@
+mutation UpdateOneHealthProvider($input: UpdateOneHealthProviderInput!) {
+  updateOneHealthProvider(input: $input) {
+    id
+    name
+    region
+    type
+    district
+    description
+  }
+}

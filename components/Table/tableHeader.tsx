@@ -65,7 +65,7 @@ export default function TableHead(props: ITableHeadProps) {
         // align="center"
       >
         {title && (
-          <Text fontSize="lg" fontWeight="bold">
+          <Text fontSize="lg" color="black" fontWeight="bold">
             {title}
           </Text>
         )}
@@ -76,6 +76,7 @@ export default function TableHead(props: ITableHeadProps) {
             ml={8}
             leftIcon={icon}
             colorScheme={buttonColorScheme}
+            className=" bg-[#1EAEA2]"
           >
             {buttonTitle}
           </Button>

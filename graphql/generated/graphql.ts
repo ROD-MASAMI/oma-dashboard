@@ -218,6 +218,7 @@ export type AppointmentFilterDoctorFilter = {
   bio?: InputMaybe<StringFieldComparison>;
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
+  departmentId?: InputMaybe<IntFieldComparison>;
   doctorTypeCategoryId?: InputMaybe<NumberFieldComparison>;
   doctorTypeId?: InputMaybe<NumberFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
@@ -349,8 +350,6 @@ export type CreateDepartmentInput = {
 export type CreateDoctorTypeCategoryDto = {
   code?: InputMaybe<Scalars["String"]["input"]>;
   description?: InputMaybe<Scalars["String"]["input"]>;
-  doctorTypeCategoryId?: InputMaybe<Scalars["Float"]["input"]>;
-  doctorTypeId?: InputMaybe<Scalars["Float"]["input"]>;
   name?: InputMaybe<Scalars["String"]["input"]>;
 };
 
@@ -484,6 +483,11 @@ export type DeleteManyResponse = {
   deletedCount: Scalars["Int"]["output"];
 };
 
+export type DeleteManySchedulesInput = {
+  /** Filter to find records to delete */
+  filter: ScheduleDeleteFilter;
+};
+
 export type DeleteOneDepartmentInput = {
   /** The id of the record to delete. */
   id: Scalars["ID"]["input"];
@@ -495,6 +499,11 @@ export type DeleteOneDoctorTypeCategoryInput = {
 };
 
 export type DeleteOneDoctorTypeInput = {
+  /** The id of the record to delete. */
+  id: Scalars["ID"]["input"];
+};
+
+export type DeleteOneScheduleInput = {
   /** The id of the record to delete. */
   id: Scalars["ID"]["input"];
 };
@@ -646,6 +655,7 @@ export type DepartmentDoctorsAggregateGroupBy = {
   bio?: Maybe<Scalars["String"]["output"]>;
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  departmentId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
@@ -669,6 +679,7 @@ export type DepartmentDoctorsAggregateResponse = {
 
 export type DepartmentDoctorsAvgAggregate = {
   __typename?: "DepartmentDoctorsAvgAggregate";
+  departmentId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["Float"]["output"]>;
@@ -693,6 +704,7 @@ export type DepartmentDoctorsCountAggregate = {
   bio?: Maybe<Scalars["Int"]["output"]>;
   createdAt?: Maybe<Scalars["Int"]["output"]>;
   deletedAt?: Maybe<Scalars["Int"]["output"]>;
+  departmentId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Int"]["output"]>;
   id?: Maybe<Scalars["Int"]["output"]>;
@@ -709,6 +721,7 @@ export type DepartmentDoctorsMaxAggregate = {
   bio?: Maybe<Scalars["String"]["output"]>;
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  departmentId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
@@ -725,6 +738,7 @@ export type DepartmentDoctorsMinAggregate = {
   bio?: Maybe<Scalars["String"]["output"]>;
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  departmentId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
@@ -738,6 +752,7 @@ export type DepartmentDoctorsMinAggregate = {
 
 export type DepartmentDoctorsSumAggregate = {
   __typename?: "DepartmentDoctorsSumAggregate";
+  departmentId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["Float"]["output"]>;
@@ -999,6 +1014,7 @@ export type Doctor = {
   bio?: Maybe<Scalars["String"]["output"]>;
   createdAt: Scalars["DateTime"]["output"];
   deletedAt: Scalars["DateTime"]["output"];
+  departmentId: Scalars["Int"]["output"];
   departments: DoctorDepartmentsConnection;
   doctorType: DoctorType;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
@@ -1039,6 +1055,7 @@ export type DoctorAggregateFilter = {
   bio?: InputMaybe<StringFieldComparison>;
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
+  departmentId?: InputMaybe<IntFieldComparison>;
   doctorTypeCategoryId?: InputMaybe<NumberFieldComparison>;
   doctorTypeId?: InputMaybe<NumberFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
@@ -1065,6 +1082,7 @@ export type DoctorFilter = {
   bio?: InputMaybe<StringFieldComparison>;
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
+  departmentId?: InputMaybe<IntFieldComparison>;
   doctorType?: InputMaybe<DoctorFilterDoctorTypeFilter>;
   doctorTypeCategoryId?: InputMaybe<NumberFieldComparison>;
   doctorTypeId?: InputMaybe<NumberFieldComparison>;
@@ -1186,6 +1204,7 @@ export enum DoctorSortFields {
   Bio = "bio",
   CreatedAt = "createdAt",
   DeletedAt = "deletedAt",
+  DepartmentId = "departmentId",
   DoctorTypeCategoryId = "doctorTypeCategoryId",
   DoctorTypeId = "doctorTypeId",
   Id = "id",
@@ -1284,6 +1303,7 @@ export type DoctorTypeCategoryFilterDoctorFilter = {
   bio?: InputMaybe<StringFieldComparison>;
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
+  departmentId?: InputMaybe<IntFieldComparison>;
   doctorTypeCategoryId?: InputMaybe<NumberFieldComparison>;
   doctorTypeId?: InputMaybe<NumberFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
@@ -1392,6 +1412,7 @@ export type DoctorTypeFilterDoctorFilter = {
   bio?: InputMaybe<StringFieldComparison>;
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
+  departmentId?: InputMaybe<IntFieldComparison>;
   doctorTypeCategoryId?: InputMaybe<NumberFieldComparison>;
   doctorTypeId?: InputMaybe<NumberFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
@@ -1768,6 +1789,7 @@ export type HealthProviderDoctorsAggregateGroupBy = {
   bio?: Maybe<Scalars["String"]["output"]>;
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  departmentId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
@@ -1791,6 +1813,7 @@ export type HealthProviderDoctorsAggregateResponse = {
 
 export type HealthProviderDoctorsAvgAggregate = {
   __typename?: "HealthProviderDoctorsAvgAggregate";
+  departmentId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["Float"]["output"]>;
@@ -1805,6 +1828,7 @@ export type HealthProviderDoctorsCountAggregate = {
   bio?: Maybe<Scalars["Int"]["output"]>;
   createdAt?: Maybe<Scalars["Int"]["output"]>;
   deletedAt?: Maybe<Scalars["Int"]["output"]>;
+  departmentId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Int"]["output"]>;
   id?: Maybe<Scalars["Int"]["output"]>;
@@ -1821,6 +1845,7 @@ export type HealthProviderDoctorsMaxAggregate = {
   bio?: Maybe<Scalars["String"]["output"]>;
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  departmentId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
@@ -1837,6 +1862,7 @@ export type HealthProviderDoctorsMinAggregate = {
   bio?: Maybe<Scalars["String"]["output"]>;
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  departmentId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
@@ -1850,6 +1876,7 @@ export type HealthProviderDoctorsMinAggregate = {
 
 export type HealthProviderDoctorsSumAggregate = {
   __typename?: "HealthProviderDoctorsSumAggregate";
+  departmentId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["Float"]["output"]>;
@@ -1921,6 +1948,7 @@ export type HealthProviderFilterDoctorFilter = {
   bio?: InputMaybe<StringFieldComparison>;
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
+  departmentId?: InputMaybe<IntFieldComparison>;
   doctorTypeCategoryId?: InputMaybe<NumberFieldComparison>;
   doctorTypeId?: InputMaybe<NumberFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
@@ -2120,6 +2148,7 @@ export type LoginResponseDto = {
   expiresIn: Scalars["Float"]["output"];
   passwordResetRequired: Scalars["Boolean"]["output"];
   tokenType: Scalars["String"]["output"];
+  userProfile: UserProfile;
 };
 
 export type Mutation = {
@@ -2138,9 +2167,11 @@ export type Mutation = {
   deleteManyDepartments: DeleteManyResponse;
   deleteManyDoctorTypeCategories: DeleteManyResponse;
   deleteManyDoctorTypes: DeleteManyResponse;
+  deleteManySchedules: DeleteManyResponse;
   deleteOneDepartment: DepartmentDeleteResponse;
   deleteOneDoctorType: DoctorTypeDeleteResponse;
   deleteOneDoctorTypeCategory: DoctorTypeCategoryDeleteResponse;
+  deleteOneSchedule: ScheduleDeleteResponse;
   forgetPassword: ForgetPasswordResponse;
   login: LoginResponseDto;
   logout: Scalars["Boolean"]["output"];
@@ -2219,6 +2250,10 @@ export type MutationDeleteManyDoctorTypesArgs = {
   input: DeleteManyDoctorTypesInput;
 };
 
+export type MutationDeleteManySchedulesArgs = {
+  input: DeleteManySchedulesInput;
+};
+
 export type MutationDeleteOneDepartmentArgs = {
   input: DeleteOneDepartmentInput;
 };
@@ -2229,6 +2264,10 @@ export type MutationDeleteOneDoctorTypeArgs = {
 
 export type MutationDeleteOneDoctorTypeCategoryArgs = {
   input: DeleteOneDoctorTypeCategoryInput;
+};
+
+export type MutationDeleteOneScheduleArgs = {
+  input: DeleteOneScheduleInput;
 };
 
 export type MutationForgetPasswordArgs = {
@@ -2663,6 +2702,7 @@ export type PatientDoctorsAggregateGroupBy = {
   bio?: Maybe<Scalars["String"]["output"]>;
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  departmentId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
@@ -2686,6 +2726,7 @@ export type PatientDoctorsAggregateResponse = {
 
 export type PatientDoctorsAvgAggregate = {
   __typename?: "PatientDoctorsAvgAggregate";
+  departmentId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["Float"]["output"]>;
@@ -2710,6 +2751,7 @@ export type PatientDoctorsCountAggregate = {
   bio?: Maybe<Scalars["Int"]["output"]>;
   createdAt?: Maybe<Scalars["Int"]["output"]>;
   deletedAt?: Maybe<Scalars["Int"]["output"]>;
+  departmentId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Int"]["output"]>;
   id?: Maybe<Scalars["Int"]["output"]>;
@@ -2726,6 +2768,7 @@ export type PatientDoctorsMaxAggregate = {
   bio?: Maybe<Scalars["String"]["output"]>;
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  departmentId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
@@ -2742,6 +2785,7 @@ export type PatientDoctorsMinAggregate = {
   bio?: Maybe<Scalars["String"]["output"]>;
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  departmentId?: Maybe<Scalars["Int"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
@@ -2755,6 +2799,7 @@ export type PatientDoctorsMinAggregate = {
 
 export type PatientDoctorsSumAggregate = {
   __typename?: "PatientDoctorsSumAggregate";
+  departmentId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   id?: Maybe<Scalars["Float"]["output"]>;
@@ -2947,6 +2992,8 @@ export type Query = {
   patient: Patient;
   patientAggregate: Array<PatientAggregateResponse>;
   patients: PatientConnection;
+  schedule: Schedule;
+  schedules: ScheduleConnection;
   userProfile: UserProfile;
   userProfileAggregate: Array<UserProfileAggregateResponse>;
   userProfiles: UserProfileConnection;
@@ -3037,6 +3084,16 @@ export type QueryPatientsArgs = {
   sorting?: Array<PatientSort>;
 };
 
+export type QueryScheduleArgs = {
+  id: Scalars["ID"]["input"];
+};
+
+export type QuerySchedulesArgs = {
+  filter?: ScheduleFilter;
+  paging?: CursorPaging;
+  sorting?: Array<ScheduleSort>;
+};
+
 export type QueryUserProfileArgs = {
   id: Scalars["ID"]["input"];
 };
@@ -3061,11 +3118,53 @@ export type Schedule = {
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   dayOfWeek: DaysOfWeek;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  doctor: Doctor;
   doctorId?: Maybe<Scalars["Float"]["output"]>;
   endTime: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
   startTime: Scalars["String"]["output"];
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+export type ScheduleConnection = {
+  __typename?: "ScheduleConnection";
+  /** Array of edges. */
+  edges: Array<ScheduleEdge>;
+  /** Paging information */
+  pageInfo: PageInfo;
+};
+
+export type ScheduleDeleteFilter = {
+  and?: InputMaybe<Array<ScheduleDeleteFilter>>;
+  createdAt?: InputMaybe<DateFieldComparison>;
+  dayOfWeek?: InputMaybe<DaysOfWeekFilterComparison>;
+  deletedAt?: InputMaybe<DateFieldComparison>;
+  doctorId?: InputMaybe<NumberFieldComparison>;
+  endTime?: InputMaybe<StringFieldComparison>;
+  id?: InputMaybe<IdFilterComparison>;
+  or?: InputMaybe<Array<ScheduleDeleteFilter>>;
+  startTime?: InputMaybe<StringFieldComparison>;
+  updatedAt?: InputMaybe<DateFieldComparison>;
+};
+
+export type ScheduleDeleteResponse = {
+  __typename?: "ScheduleDeleteResponse";
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  dayOfWeek?: Maybe<DaysOfWeek>;
+  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  doctorId?: Maybe<Scalars["Float"]["output"]>;
+  endTime?: Maybe<Scalars["String"]["output"]>;
+  id?: Maybe<Scalars["ID"]["output"]>;
+  startTime?: Maybe<Scalars["String"]["output"]>;
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+export type ScheduleEdge = {
+  __typename?: "ScheduleEdge";
+  /** Cursor for this node. */
+  cursor: Scalars["ConnectionCursor"]["output"];
+  /** The node containing the Schedule */
+  node: Schedule;
 };
 
 export type ScheduleFilter = {
@@ -3087,6 +3186,7 @@ export type ScheduleFilterDoctorFilter = {
   bio?: InputMaybe<StringFieldComparison>;
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
+  departmentId?: InputMaybe<IntFieldComparison>;
   doctorTypeCategoryId?: InputMaybe<NumberFieldComparison>;
   doctorTypeId?: InputMaybe<NumberFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
@@ -3162,8 +3262,6 @@ export type UpdateDepartmentDto = {
 export type UpdateDoctorTypeCategoryDto = {
   code?: InputMaybe<Scalars["String"]["input"]>;
   description?: InputMaybe<Scalars["String"]["input"]>;
-  doctorTypeCategoryId?: InputMaybe<Scalars["Float"]["input"]>;
-  doctorTypeId?: InputMaybe<Scalars["Float"]["input"]>;
   name?: InputMaybe<Scalars["String"]["input"]>;
 };
 
@@ -3427,6 +3525,7 @@ export type UserProfileFilterDoctorFilter = {
   bio?: InputMaybe<StringFieldComparison>;
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
+  departmentId?: InputMaybe<IntFieldComparison>;
   doctorTypeCategoryId?: InputMaybe<NumberFieldComparison>;
   doctorTypeId?: InputMaybe<NumberFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
@@ -3528,6 +3627,26 @@ export type VerifyOtpInput = {
   verificationCode: Scalars["String"]["input"];
 };
 
+export type ProvidersMutationVariables = Exact<{
+  input: CreateOneHealthProviderInput;
+}>;
+
+export type ProvidersMutation = {
+  __typename?: "Mutation";
+  createOneHealthProvider: {
+    __typename?: "HealthProvider";
+    id: string;
+    name?: string | null;
+    region?: string | null;
+    type?: string | null;
+    updatedAt: any;
+    district?: string | null;
+    description?: string | null;
+    deletedAt: any;
+    createdAt: any;
+  };
+};
+
 export type LoginMutationVariables = Exact<{
   identifier: Scalars["String"]["input"];
   password: Scalars["String"]["input"];
@@ -3540,6 +3659,23 @@ export type LoginMutation = {
     accessToken: string;
     expiresIn: number;
     passwordResetRequired: boolean;
+  };
+};
+
+export type UpdateOneHealthProviderMutationVariables = Exact<{
+  input: UpdateOneHealthProviderInput;
+}>;
+
+export type UpdateOneHealthProviderMutation = {
+  __typename?: "Mutation";
+  updateOneHealthProvider: {
+    __typename?: "HealthProvider";
+    id: string;
+    name?: string | null;
+    region?: string | null;
+    type?: string | null;
+    district?: string | null;
+    description?: string | null;
   };
 };
 
@@ -3664,9 +3800,52 @@ export type HealthProvidersQuery = {
         }>;
       };
     }>;
+    pageInfo: {
+      __typename?: "PageInfo";
+      endCursor?: any | null;
+      hasNextPage?: boolean | null;
+      hasPreviousPage?: boolean | null;
+      startCursor?: any | null;
+    };
   };
 };
 
+export const ProvidersDocument = `
+    mutation Providers($input: CreateOneHealthProviderInput!) {
+  createOneHealthProvider(input: $input) {
+    id
+    name
+    region
+    type
+    updatedAt
+    district
+    description
+    deletedAt
+    createdAt
+  }
+}
+    `;
+export const useProvidersMutation = <TError = unknown, TContext = unknown>(
+  client: GraphQLClient,
+  options?: UseMutationOptions<
+    ProvidersMutation,
+    TError,
+    ProvidersMutationVariables,
+    TContext
+  >,
+  headers?: RequestInit["headers"]
+) =>
+  useMutation<ProvidersMutation, TError, ProvidersMutationVariables, TContext>(
+    ["Providers"],
+    (variables?: ProvidersMutationVariables) =>
+      fetcher<ProvidersMutation, ProvidersMutationVariables>(
+        client,
+        ProvidersDocument,
+        variables,
+        headers
+      )(),
+    options
+  );
 export const LoginDocument = `
     mutation Login($identifier: String!, $password: String!) {
   login(identifier: $identifier, password: $password) {
@@ -3695,6 +3874,45 @@ export const useLoginMutation = <TError = unknown, TContext = unknown>(
         variables,
         headers
       )(),
+    options
+  );
+export const UpdateOneHealthProviderDocument = `
+    mutation UpdateOneHealthProvider($input: UpdateOneHealthProviderInput!) {
+  updateOneHealthProvider(input: $input) {
+    id
+    name
+    region
+    type
+    district
+    description
+  }
+}
+    `;
+export const useUpdateOneHealthProviderMutation = <
+  TError = unknown,
+  TContext = unknown
+>(
+  client: GraphQLClient,
+  options?: UseMutationOptions<
+    UpdateOneHealthProviderMutation,
+    TError,
+    UpdateOneHealthProviderMutationVariables,
+    TContext
+  >,
+  headers?: RequestInit["headers"]
+) =>
+  useMutation<
+    UpdateOneHealthProviderMutation,
+    TError,
+    UpdateOneHealthProviderMutationVariables,
+    TContext
+  >(
+    ["UpdateOneHealthProvider"],
+    (variables?: UpdateOneHealthProviderMutationVariables) =>
+      fetcher<
+        UpdateOneHealthProviderMutation,
+        UpdateOneHealthProviderMutationVariables
+      >(client, UpdateOneHealthProviderDocument, variables, headers)(),
     options
   );
 export const DoctorsDocument = `
@@ -3808,6 +4026,12 @@ export const HealthProvidersDocument = `
           }
         }
       }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
     }
     totalCount
   }

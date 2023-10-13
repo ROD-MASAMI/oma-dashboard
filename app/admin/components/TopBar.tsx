@@ -5,7 +5,7 @@ import { useDashboardContext } from "./Provider";
 export function TopBar() {
   const { openSidebar } = useDashboardContext();
   return (
-    <header className="relative z-10 h-20 w-full items-center bg-[#25074D]">
+    <header className="relative z-10 h-20 w-full items-center bg-[#1EAEA2]">
       <div className="relative mx-auto flex h-full flex-col justify-center px-3">
         <div className="relative flex w-full items-center pl-1 sm:ml-0 sm:pr-2">
           <div className="relative left-0 flex w-3/4">

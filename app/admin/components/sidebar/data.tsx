@@ -17,7 +17,7 @@ export const data = [
   {
     title: "Providers",
     icon: <MediaIcon />,
-    link: "/admin/Providers",
+    link: "/admin/providers",
   },
   {
     title: "Departments",

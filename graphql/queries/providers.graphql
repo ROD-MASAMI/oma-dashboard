@@ -66,6 +66,12 @@ query HealthProviders($paging: CursorPaging!, $filter: HealthProviderFilter!) {
         }
       }
     }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
     totalCount
   }
 }

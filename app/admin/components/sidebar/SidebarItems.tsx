@@ -5,7 +5,7 @@ import { Router } from "next/router";
 import React from "react";
 
 const style = {
-  inactive: "text-gray-400",
+  inactive: "text-white",
   active: "font-medium text-white",
   link: "flex items-center justify-start my-2 p-4 text-sm w-full hover:text-white",
 };

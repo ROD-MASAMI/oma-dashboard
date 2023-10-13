@@ -11,7 +11,7 @@ export class AuthorizationInterceptor extends AbstractInterceptor {
       ctx.res.errors.length > 0 &&
       ctx.res.errors.some((e) => e.message === "Session expired! Please login.")
     ) {
-      window.location.href = "/auth";
+      window.location.href = "/auth/login";
     } else {
       console.log("auth");
       return ctx;

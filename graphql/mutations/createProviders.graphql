@@ -1,0 +1,13 @@
+mutation Providers($input: CreateOneHealthProviderInput!) {
+  createOneHealthProvider(input: $input) {
+    id
+    name
+    region
+    type
+    updatedAt
+    district
+    description
+    deletedAt
+    createdAt
+  }
+}

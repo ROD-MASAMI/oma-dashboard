@@ -81,6 +81,7 @@ const index = (props: IDataTableProps) => {
         onMoreItems={(value) => onMoreItems(value)}
         data={data}
         columns={columns}
+        buttonColorScheme="blue"
       />
       <TableContainer>
         <Table variant="none" style={style} {...getTableProps()}>
@@ -128,6 +129,7 @@ const index = (props: IDataTableProps) => {
                   {row.cells.map((cell: any) => {
                     return (
                       <Td
+                        color="black"
                         key={cell}
                         onClick={() =>
                           onRowClick && cell.column.clickable

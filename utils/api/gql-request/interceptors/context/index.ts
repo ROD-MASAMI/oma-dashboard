@@ -51,9 +51,9 @@ export class GQLContext {
 
       return this.res;
     } catch (error: any) {
-      throw error;
-      // await this.setResponse(error.response as GQLResponse);
-      // return this.res;
+      // throw error;
+      await this.setResponse(error.response as GQLResponse);
+      return this.res;
     }
   }
 
