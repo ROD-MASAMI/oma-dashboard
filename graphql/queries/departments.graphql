@@ -1,0 +1,40 @@
+query Departments($paging: CursorPaging!, $filter: DepartmentFilter!) {
+  departments(paging: $paging, filter: $filter) {
+    edges {
+      cursor
+      node {
+        id
+        name
+        doctors {
+          nodes {
+            bio
+            id
+            location
+            price
+            ratings
+            userProfile {
+              id
+              lastName
+              middleName
+              phoneNumber
+              updatedAt
+              createdAt
+              dateOfBirth
+              email
+              firstName
+              gender
+            }
+          }
+        }
+        description
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+    totalCount
+  }
+}

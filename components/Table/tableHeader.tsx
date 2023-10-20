@@ -83,7 +83,7 @@ export default function TableHead(props: ITableHeadProps) {
         )}
 
         <Spacer />
-        <HStack spacing={4}>
+        {/* <HStack spacing={4}>
           <InputGroup width="250px">
             <Input
               placeholder="Search"
@@ -93,7 +93,7 @@ export default function TableHead(props: ITableHeadProps) {
               <SearchIcon color="primary.500" />
             </InputRightElement>
           </InputGroup>
-        </HStack>
+        </HStack> */}
       </Flex>
     </Box>
   );

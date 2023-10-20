@@ -27,13 +27,27 @@ import { getPageSize } from "@/utils/helpers";
 import CreateProvidersDrawer from "./components/CreateProvidersDrawer";
 import UpdateProviderDrawer from "./components/UpdateProviderDrawer";
 import { usePromptDialog } from "@/components/Prompt/PromptService";
+import useDialog from "@/hooks/useDialog";
+import AlertDialog from "@/components/Dialog";
 const page = () => {
   const [cursorPaging, setCursorPaging] = useState<CursorPaging>({ first: 10 });
   const [page, setPaging] = useState<IPaginationProps>();
   const [healthProviders, setHealthProviders] = useState<HealthProvider[]>([]);
   const [healthProvider, setHealthProvider] = useState<HealthProvider>();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const confirm = usePromptDialog();
+  const {
+    setAction,
+    setTitle,
+    setDescription,
+    setButtonText,
+    onOpen: openDialog,
+    title,
+    description,
+    buttonText,
+    onSubmit,
+    isOpen: isDialog,
+    onClose: closeDialog,
+  } = useDialog();
   const btnRef = React.useRef();
   const { data, isError, isLoading } = useHealthProvidersQuery<
     HealthProvidersQuery,
@@ -60,18 +74,13 @@ const page = () => {
     onOpen();
   };
   const onDelete = (provider: HealthProvider) => {
-    confirm({
-      title: "Confirm Deletion",
-      description: `You are about to delete health provider ${provider.name}, are you sure you want to confirm?`,
-      catchOnCancel: true,
-    })
-      .then(() => {
-        healthProviders.splice(healthProviders.indexOf(provider), 1);
-        //onconfirm
-        // mutate({ input: { id: provider.id } });
-        //remove hospital from data.hospitals
-      })
-      .catch(() => {});
+    setButtonText("Delete");
+    setTitle("Confirm Deletion");
+    setDescription(
+      `You are about to delete health provider ${provider.name}, are you sure you want to confirm?`
+    );
+    setAction(() => console.log("deleted"));
+    openDialog();
   };
   const handleCloseDetailsDrawer = () => {};
   const handleOpenDetailsDrawer = (provider: HealthProvider) => {};
@@ -143,40 +152,50 @@ const page = () => {
     },
   ];
   return (
-    <Box>
-      <CreateProvidersDrawer
-        onCreated={(data) => console.log(data)}
-        isOpen={!healthProvider && isOpen}
-        onClose={onClose}
-        btnRef={btnRef}
-      />
-      <UpdateProviderDrawer
-        onUpdated={(data) => console.log(data)}
-        isOpen={healthProvider! && isOpen}
-        onClose={onClose}
-        btnRef={btnRef}
-        provider={healthProvider!}
-      />
+    <>
+      <Box>
+        <CreateProvidersDrawer
+          onCreated={(data) => console.log(data)}
+          isOpen={!healthProvider && isOpen}
+          onClose={onClose}
+          btnRef={btnRef}
+        />
+        <UpdateProviderDrawer
+          onUpdated={(data) => console.log(data)}
+          isOpen={healthProvider! && isOpen}
+          onClose={onClose}
+          btnRef={btnRef}
+          provider={healthProvider!}
+        />
 
-      <DataTable
-        onButtonClick={onNew}
-        buttonIcon={<BsPersonPlus />}
-        buttonTitle="New Provider"
-        onSearch={(val) => console.log(val!)}
-        loading={isLoading}
-        data={healthProviders}
-        page={page}
-        onRowClick={(row: HealthProvider) => handleOpenDetailsDrawer(row)}
-        columns={columns}
-        title="Health Providers"
-        onMoreItems={(value: CursorPaging) => {
-          setCursorPaging(value);
-        }}
-        onChange={(value: number | CursorPaging | undefined) => {
-          setCursorPaging(value as CursorPaging);
-        }}
+        <DataTable
+          onButtonClick={onNew}
+          buttonIcon={<BsPersonPlus />}
+          buttonTitle="New Provider"
+          onSearch={(val) => console.log(val!)}
+          loading={isLoading}
+          data={healthProviders}
+          page={page}
+          onRowClick={(row: HealthProvider) => handleOpenDetailsDrawer(row)}
+          columns={columns}
+          title="Health Providers"
+          onMoreItems={(value: CursorPaging) => {
+            setCursorPaging(value);
+          }}
+          onChange={(value: number | CursorPaging | undefined) => {
+            setCursorPaging(value as CursorPaging);
+          }}
+        />
+      </Box>
+      <AlertDialog
+        isOpen={isDialog}
+        onClose={closeDialog}
+        title={title}
+        description={description}
+        onPress={() => window.alert("deleted")}
+        actionText={buttonText}
       />
-    </Box>
+    </>
   );
 };
 

@@ -1,0 +1,17 @@
+mutation createDepartment($input: CreateOneDepartmentInput!) {
+  createOneDepartment(input: $input) {
+    code
+    description
+    id
+    name
+  }
+}
+
+mutation UpdateOneDepartment($input: UpdateOneDepartmentInput!) {
+  updateOneDepartment(input: $input) {
+    code
+    id
+    name
+    description
+  }
+}

@@ -49,7 +49,7 @@ const index = (props: IDataTableProps) => {
     onMoreItems,
   } = props;
   const rowColor = useColorModeValue("blackAlpha.50", "whiteAlpha.50");
-  const headerColor = useColorModeValue("gray.100", "gray.900");
+  const headerColor = useColorModeValue("green.100", "green.300");
   const _data = React.useMemo<any[]>(() => data, [data]);
   const _columns = React.useMemo<Column<any>[]>(() => columns, [columns]);
 

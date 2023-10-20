@@ -1,37 +1,39 @@
 import { JFieldGroup } from "@/components/JForm";
 import JFormDrawer from "@/components/JForm/JFormDrawer";
 import {
+  CreateDepartmentMutation,
+  CreateDepartmentMutationVariables,
   CursorPaging,
-  ProvidersMutation,
-  ProvidersMutationVariables,
-  useProvidersMutation,
+  useCreateDepartmentMutation,
 } from "@/graphql/generated/graphql";
 import { graphqlRequestClient } from "@/utils/api/graphqlRequestClient";
 import { GQLErrors } from "@/utils/types/error";
 import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { object, string } from "yup";
+
 export interface ICreateHospitalDrawerProps {
   isOpen: boolean;
   onClose(): void;
   btnRef?: React.RefObject<any>;
   onCreated: (values: any) => void;
 }
-const CreateProvidersDrawer = (props: ICreateHospitalDrawerProps) => {
+
+const CreateDepartmentDrawer = (props: ICreateHospitalDrawerProps) => {
   const [cursorPaging, setCursorPaging] = useState<CursorPaging>({ first: 10 });
   const { isOpen, onClose, btnRef, onCreated } = props;
   const Client = useQueryClient();
 
-  const { isLoading, mutate } = useProvidersMutation<GQLErrors>(
+  const { isLoading, mutate } = useCreateDepartmentMutation<GQLErrors>(
     graphqlRequestClient,
     {
       onSuccess: (
-        data: ProvidersMutation,
-        _variables: ProvidersMutationVariables,
+        data: CreateDepartmentMutation,
+        _variables: CreateDepartmentMutationVariables,
         _context: unknown
       ) => {
         Client.invalidateQueries({
-          queryKey: ["Providers", { filter: {}, paging: cursorPaging }],
+          queryKey: ["Doctors", { filter: {}, paging: cursorPaging }],
         });
         onCreated(data);
         onClose();
@@ -42,7 +44,6 @@ const CreateProvidersDrawer = (props: ICreateHospitalDrawerProps) => {
   const values = {
     name: "",
     description: "",
-    type: "",
   };
 
   const fields: JFieldGroup[] = [
@@ -55,8 +56,8 @@ const CreateProvidersDrawer = (props: ICreateHospitalDrawerProps) => {
       fields: [
         {
           name: "name",
-          label: "Provider Name",
-          placeholder: "Provider Name",
+          label: "Department Name",
+          placeholder: "Department Name",
           type: "text",
         },
         {
@@ -65,49 +66,27 @@ const CreateProvidersDrawer = (props: ICreateHospitalDrawerProps) => {
           placeholder: "description",
           type: "text",
         },
-        {
-          name: "region",
-          label: "Region",
-          placeholder: "description",
-          type: "text",
-        },
-        {
-          name: "district",
-          label: "District",
-          placeholder: "description",
-          type: "text",
-        },
-        {
-          name: "type",
-          label: "Type",
-          placeholder: "Type",
-          colSpan: 1,
-          type: "text",
-        },
       ],
     },
   ];
   const schema = object().shape({
     description: string().required("Please enter description"),
-    name: string().required("Please enter Hospital name"),
-    type: string().required("Please enter type"),
-    region: string().required("Please enter region"),
-    district: string().required("Please enter district"),
+    name: string().required("Please enter Department name"),
   });
   return (
     <JFormDrawer
       isOpen={isOpen}
       finalFocusRef={btnRef}
-      drawerTitle="Create Health Provider"
+      drawerTitle="Create Department"
       isLoading={isLoading}
       onClose={onClose}
       schema={schema}
       submitText="Save"
-      onSubmit={(value) => mutate({ input: { healthProvider: value } })}
+      onSubmit={(value) => mutate({ input: { department: value } })}
       initialValues={values}
       fieldGroups={fields}
     />
   );
 };
 
-export default CreateProvidersDrawer;
+export default CreateDepartmentDrawer;

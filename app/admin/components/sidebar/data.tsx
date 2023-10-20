@@ -11,7 +11,7 @@ import React from "react";
 export const data = [
   {
     title: "Dashboard",
-    icon: <HomeIcon />,
+    icon: <ServerIcon />,
     link: "/admin",
   },
   {
@@ -21,12 +21,12 @@ export const data = [
   },
   {
     title: "Departments",
-    icon: <ContactIcon />,
+    icon: <TerminalIcon />,
     link: "/admin/departments",
   },
   {
     title: "Doctors",
-    icon: <ServerIcon />,
+    icon: <HomeIcon />,
     link: "/admin/doctors",
   },
 ];

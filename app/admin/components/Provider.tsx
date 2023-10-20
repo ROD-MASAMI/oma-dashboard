@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { Router } from "next/router";
+import useDialog from "@/hooks/useDialog";
+import AlertDialog from "@/components/Dialog";
 
 interface DashboardProviderProps {
   children: React.ReactNode;
@@ -17,7 +19,8 @@ const Context = React.createContext<ProviderValues>({});
 
 export function DashboardProvider({ children }: DashboardProviderProps) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
-  // const router = useRouter();
+  const { isOpen, onClose, buttonText, onSubmit, title, description } =
+    useDialog();
 
   const openSidebar = React.useCallback(() => {
     setSidebarOpen(true);
@@ -53,6 +56,14 @@ export function DashboardProvider({ children }: DashboardProviderProps) {
   return (
     <Context.Provider value={{ sidebarOpen, openSidebar, closeSidebar }}>
       {children}
+      <AlertDialog
+        isOpen={isOpen}
+        onClose={onClose}
+        title={title}
+        description={description}
+        onPress={onSubmit}
+        actionText={buttonText}
+      />
     </Context.Provider>
   );
 }
