@@ -4,17 +4,17 @@ import JInput from "./JInput";
 import React from "react";
 
 export interface IJFormGroupProps {
-    fieldGroups:JFieldGroup[];
-    onChange: (value:any) => void;
+  fieldGroups: JFieldGroup[];
+  onChange: (value: any) => void;
 }
 
-export default function JFormGroup (props: IJFormGroupProps) {
-    const {fieldGroups, onChange} = props
+export default function JFormGroup(props: IJFormGroupProps) {
+  const { fieldGroups, onChange } = props;
   return (
-      <Box>
-            {fieldGroups.map((group, i) => (
+    <Box>
+      {fieldGroups.map((group, i) => (
         <VStack key={i}>
-          {group.label && <Heading>{group.label}</Heading>}
+          {group.label && <Heading color="black">{group.label}</Heading>}
           <Grid
             width="100%"
             templateColumns={group.templateColumns}
@@ -24,14 +24,17 @@ export default function JFormGroup (props: IJFormGroupProps) {
             rowGap={group.rowGap}
           >
             {group.fields.map((field, fIndex) => (
-              <GridItem key={fIndex} rowSpan={field.rowSpan} colSpan={field.colSpan}>
-                <JInput onChange={onChange}  field={field} />
+              <GridItem
+                key={fIndex}
+                rowSpan={field.rowSpan}
+                colSpan={field.colSpan}
+              >
+                <JInput onChange={onChange} field={field} />
               </GridItem>
             ))}
           </Grid>
         </VStack>
       ))}
-      </Box>
-  
+    </Box>
   );
 }

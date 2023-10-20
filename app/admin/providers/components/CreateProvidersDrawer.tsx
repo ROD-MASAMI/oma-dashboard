@@ -68,13 +68,13 @@ const CreateProvidersDrawer = (props: ICreateHospitalDrawerProps) => {
         {
           name: "region",
           label: "Region",
-          placeholder: "description",
+          placeholder: "region",
           type: "text",
         },
         {
           name: "district",
           label: "District",
-          placeholder: "description",
+          placeholder: "district",
           type: "text",
         },
         {

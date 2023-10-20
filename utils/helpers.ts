@@ -6,6 +6,13 @@ export const saveLoginDetailsToLocalStorage = (login: LoginMutation) => {
   // localStorage.setItem('user', JSON.stringify(user))
 };
 
+//logout clean local storage accessToken, refreshToken and user
+export const removeUserDetailsFronLocalStorage = () => {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
+  localStorage.removeItem("user");
+};
+
 export const truncate = (str: string, max = 10) => {
   const array = str.trim().split(" ");
   const ellipsis = array.length > max ? "..." : "";

@@ -9,9 +9,16 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 import { HamburgerIcon, WarningTwoIcon } from "@chakra-ui/icons";
+import { removeUserDetailsFronLocalStorage } from "@/utils/helpers";
+import { useRouter } from "next/navigation";
 
 export function TopBar() {
+  const router = useRouter();
   const { openSidebar } = useDashboardContext();
+  const logout = () => {
+    removeUserDetailsFronLocalStorage();
+    router.push("/");
+  };
   return (
     <header className="relative z-10 h-20 w-full items-center bg-[#1EAEA2]">
       <div className="relative mx-auto flex h-full flex-col justify-center px-3">
@@ -38,7 +45,11 @@ export function TopBar() {
                 variant="outline"
               />
               <MenuList>
-                <MenuItem icon={<WarningTwoIcon color="red.400" />}>
+                <MenuItem
+                  onClick={() => logout()}
+                  color="black"
+                  icon={<WarningTwoIcon color="red.400" />}
+                >
                   Log out
                 </MenuItem>
               </MenuList>

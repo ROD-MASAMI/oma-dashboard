@@ -22,18 +22,14 @@ export default function InputField(props: IInputFieldProps): JSX.Element {
   const { name, label, leftAddon, placeholder, disabled, ...rest } = props;
   const [field, meta] = useField(props);
   return (
-    <FormControl  id={name} isInvalid={!!meta.error && !!meta.touched}>
+    <FormControl id={name} isInvalid={!!meta.error && !!meta.touched}>
       {label && (
-        <FormLabel mb={1} htmlFor={props.name}>
+        <FormLabel color="black" mb={1} htmlFor={props.name}>
           {label}
         </FormLabel>
       )}
       <InputGroup>
-        {leftAddon && 
-        <InputLeftAddon >
-          {leftAddon}
-          </InputLeftAddon>
-        }
+        {leftAddon && <InputLeftAddon>{leftAddon}</InputLeftAddon>}
         <Input
           disabled={disabled}
           placeholder={placeholder}
