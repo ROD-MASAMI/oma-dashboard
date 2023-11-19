@@ -13,7 +13,7 @@ const page = () => {
 
   return (
     <div className=" flex  flex-col bg-slate-50 justify-center items-center min-h-[100vh] w-[100%] ">
-      {isError && errors && <IAlert title={errors[0].message} type="error" />}
+      {isError && errors && <IAlert title={errors[0]?.message} type="error" />}
 
       <Text className=" text-3xl text-black">ADMIN PANEL</Text>
       <Box

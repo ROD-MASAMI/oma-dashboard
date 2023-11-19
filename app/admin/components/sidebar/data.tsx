@@ -29,4 +29,9 @@ export const data = [
     icon: <HomeIcon />,
     link: "/admin/doctors",
   },
+  {
+    title: "Users",
+    icon: <HomeIcon />,
+    link: "/admin/users",
+  },
 ];

@@ -1,4 +1,5 @@
 import { CursorPaging, LoginMutation } from "@/graphql/generated/graphql";
+import dayjs from "dayjs";
 
 export const saveLoginDetailsToLocalStorage = (login: LoginMutation) => {
   const { accessToken, expiresIn } = login.login;
@@ -19,6 +20,9 @@ export const truncate = (str: string, max = 10) => {
   return array.slice(0, max).join(" ") + ellipsis;
 };
 
+export const dateFormatter = (date: string): string => {
+  return dayjs(date).format("DD MMM YYYY");
+};
 export const getPageSize = (cursorPaging: CursorPaging) => {
   let pageSize: number;
 

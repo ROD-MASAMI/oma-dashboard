@@ -29,6 +29,7 @@ import { GQLErrors } from "@/utils/types/error";
 import { BiPencil, BiTrash } from "react-icons/bi";
 import { FiMoreHorizontal } from "react-icons/fi";
 import CreateDepartmentDrawer from "./components/CreateDepartmentDrawer";
+import UpdateDepartmentDrawer from "./components/UpdateDepartmentDrawer";
 
 const page = () => {
   const [cursorPaging, setCursorPaging] = useState<CursorPaging>({ first: 10 });
@@ -74,7 +75,7 @@ const page = () => {
     // openDialog();
   };
   const handleCloseDetailsDrawer = () => {};
-  const handleOpenDetailsDrawer = (provider: HealthProvider) => {};
+  const handleOpenDetailsDrawer = (provider: Department) => {};
 
   const columns = [
     {
@@ -140,13 +141,13 @@ const page = () => {
         onClose={onClose}
         btnRef={btnRef}
       />
-      {/* <UpdateProviderDrawer
-      onUpdated={(data) => console.log(data)}
-      isOpen={healthProvider! && isOpen}
-      onClose={onClose}
-      btnRef={btnRef}
-      provider={healthProvider!}
-    /> */}
+      <UpdateDepartmentDrawer
+        onUpdated={(data) => console.log(data)}
+        isOpen={department! && isOpen}
+        onClose={onClose}
+        btnRef={btnRef}
+        provider={department!}
+      />
 
       <DataTable
         onButtonClick={onNew}
@@ -156,9 +157,9 @@ const page = () => {
         loading={isLoading}
         data={departments}
         page={page}
-        onRowClick={(row: HealthProvider) => handleOpenDetailsDrawer(row)}
+        onRowClick={(row: Department) => handleOpenDetailsDrawer(row)}
         columns={columns}
-        title="Health Providers"
+        title="Departments"
         onMoreItems={(value: CursorPaging) => {
           setCursorPaging(value);
         }}

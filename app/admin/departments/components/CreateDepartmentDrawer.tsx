@@ -33,7 +33,7 @@ const CreateDepartmentDrawer = (props: ICreateHospitalDrawerProps) => {
         _context: unknown
       ) => {
         Client.invalidateQueries({
-          queryKey: ["Doctors", { filter: {}, paging: cursorPaging }],
+          queryKey: ["Departments", { filter: {}, paging: cursorPaging }],
         });
         onCreated(data);
         onClose();

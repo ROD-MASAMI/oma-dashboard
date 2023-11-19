@@ -1,5 +1,5 @@
 import { GraphQLClient } from "graphql-request";
-// import { RequestInit } from "graphql-request/dist/types.dom";
+// import { RequestInit } from 'graphql-request/dist/types.dom';
 import {
   useMutation,
   useQuery,
@@ -35,7 +35,7 @@ function fetcher<TData, TVariables extends { [key: string]: any }>(
 ) {
   return async (): Promise<TData> =>
     client.request({
-      // @ts-ignore
+      //@ts-ignore
       query,
       variables,
       requestHeaders,
@@ -58,18 +58,18 @@ export type Appointment = {
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
   departmentId?: Maybe<Scalars["Float"]["output"]>;
-  departments: Department;
   doctor: Doctor;
   doctorId?: Maybe<Scalars["Float"]["output"]>;
-  healthProvider: HealthProvider;
   healthProviderId?: Maybe<Scalars["Float"]["output"]>;
   id: Scalars["ID"]["output"];
   isActive?: Maybe<Scalars["Boolean"]["output"]>;
   patient: Patient;
   patientId?: Maybe<Scalars["Float"]["output"]>;
   price?: Maybe<Scalars["Float"]["output"]>;
+  schedule?: Maybe<Schedule>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
 };
 
@@ -88,6 +88,7 @@ export type AppointmentAggregateFilter = {
   price?: InputMaybe<NumberFieldComparison>;
   scheduleTime?: InputMaybe<DateFieldComparison>;
   status?: InputMaybe<StringFieldComparison>;
+  transactionId?: InputMaybe<StringFieldComparison>;
   updatedAt?: InputMaybe<DateFieldComparison>;
 };
 
@@ -105,6 +106,7 @@ export type AppointmentAggregateGroupBy = {
   price?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
 };
 
@@ -168,6 +170,7 @@ export type AppointmentCountAggregate = {
   price?: Maybe<Scalars["Int"]["output"]>;
   scheduleTime?: Maybe<Scalars["Int"]["output"]>;
   status?: Maybe<Scalars["Int"]["output"]>;
+  transactionId?: Maybe<Scalars["Int"]["output"]>;
   updatedAt?: Maybe<Scalars["Int"]["output"]>;
 };
 
@@ -185,10 +188,8 @@ export type AppointmentFilter = {
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
   departmentId?: InputMaybe<NumberFieldComparison>;
-  departments?: InputMaybe<AppointmentFilterDepartmentFilter>;
   doctor?: InputMaybe<AppointmentFilterDoctorFilter>;
   doctorId?: InputMaybe<NumberFieldComparison>;
-  healthProvider?: InputMaybe<AppointmentFilterHealthProviderFilter>;
   healthProviderId?: InputMaybe<NumberFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
   isActive?: InputMaybe<BooleanFieldComparison>;
@@ -196,20 +197,10 @@ export type AppointmentFilter = {
   patient?: InputMaybe<AppointmentFilterPatientFilter>;
   patientId?: InputMaybe<NumberFieldComparison>;
   price?: InputMaybe<NumberFieldComparison>;
+  schedule?: InputMaybe<AppointmentFilterScheduleFilter>;
   scheduleTime?: InputMaybe<DateFieldComparison>;
   status?: InputMaybe<StringFieldComparison>;
-  updatedAt?: InputMaybe<DateFieldComparison>;
-};
-
-export type AppointmentFilterDepartmentFilter = {
-  and?: InputMaybe<Array<AppointmentFilterDepartmentFilter>>;
-  code?: InputMaybe<StringFieldComparison>;
-  createdAt?: InputMaybe<DateFieldComparison>;
-  deletedAt?: InputMaybe<DateFieldComparison>;
-  description?: InputMaybe<StringFieldComparison>;
-  id?: InputMaybe<IdFilterComparison>;
-  name?: InputMaybe<StringFieldComparison>;
-  or?: InputMaybe<Array<AppointmentFilterDepartmentFilter>>;
+  transactionId?: InputMaybe<StringFieldComparison>;
   updatedAt?: InputMaybe<DateFieldComparison>;
 };
 
@@ -231,21 +222,6 @@ export type AppointmentFilterDoctorFilter = {
   userProfileId?: InputMaybe<NumberFieldComparison>;
 };
 
-export type AppointmentFilterHealthProviderFilter = {
-  and?: InputMaybe<Array<AppointmentFilterHealthProviderFilter>>;
-  createdAt?: InputMaybe<DateFieldComparison>;
-  deletedAt?: InputMaybe<DateFieldComparison>;
-  description?: InputMaybe<StringFieldComparison>;
-  district?: InputMaybe<StringFieldComparison>;
-  id?: InputMaybe<IdFilterComparison>;
-  isFastTrack?: InputMaybe<BooleanFieldComparison>;
-  name?: InputMaybe<StringFieldComparison>;
-  or?: InputMaybe<Array<AppointmentFilterHealthProviderFilter>>;
-  region?: InputMaybe<StringFieldComparison>;
-  type?: InputMaybe<StringFieldComparison>;
-  updatedAt?: InputMaybe<DateFieldComparison>;
-};
-
 export type AppointmentFilterPatientFilter = {
   and?: InputMaybe<Array<AppointmentFilterPatientFilter>>;
   createdAt?: InputMaybe<DateFieldComparison>;
@@ -254,6 +230,20 @@ export type AppointmentFilterPatientFilter = {
   or?: InputMaybe<Array<AppointmentFilterPatientFilter>>;
   updatedAt?: InputMaybe<DateFieldComparison>;
   userProfileId?: InputMaybe<NumberFieldComparison>;
+};
+
+export type AppointmentFilterScheduleFilter = {
+  and?: InputMaybe<Array<AppointmentFilterScheduleFilter>>;
+  createdAt?: InputMaybe<DateFieldComparison>;
+  dayOfWeek?: InputMaybe<DaysOfWeekFilterComparison>;
+  deletedAt?: InputMaybe<DateFieldComparison>;
+  doctorId?: InputMaybe<NumberFieldComparison>;
+  endTime?: InputMaybe<StringFieldComparison>;
+  id?: InputMaybe<IdFilterComparison>;
+  isFull?: InputMaybe<BooleanFieldComparison>;
+  or?: InputMaybe<Array<AppointmentFilterScheduleFilter>>;
+  startTime?: InputMaybe<StringFieldComparison>;
+  updatedAt?: InputMaybe<DateFieldComparison>;
 };
 
 export type AppointmentMaxAggregate = {
@@ -269,6 +259,7 @@ export type AppointmentMaxAggregate = {
   price?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
 };
 
@@ -285,6 +276,7 @@ export type AppointmentMinAggregate = {
   price?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
 };
 
@@ -307,6 +299,7 @@ export enum AppointmentSortFields {
   Price = "price",
   ScheduleTime = "scheduleTime",
   Status = "status",
+  TransactionId = "transactionId",
   UpdatedAt = "updatedAt",
 }
 
@@ -410,6 +403,11 @@ export type CreateOneDoctorTypeInput = {
 export type CreateOneHealthProviderInput = {
   /** The record to create */
   healthProvider: CreateHealthProviderDto;
+};
+
+export type CreateTransactionSubscriptionFilterInput = {
+  /** Specify to filter the records returned. */
+  filter: TransactionSubscriptionFilter;
 };
 
 export type CursorPaging = {
@@ -536,9 +534,13 @@ export type DeleteOneScheduleInput = {
   id: Scalars["ID"]["input"];
 };
 
+export type DeleteOneTransactionSubscriptionFilterInput = {
+  /** Specify to filter the records returned. */
+  filter: TransactionSubscriptionFilter;
+};
+
 export type Department = {
   __typename?: "Department";
-  appointments?: Maybe<Appointment>;
   code?: Maybe<Scalars["String"]["output"]>;
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
@@ -549,8 +551,6 @@ export type Department = {
   healthProvidersAggregate: Array<DepartmentHealthProvidersAggregateResponse>;
   id: Scalars["ID"]["output"];
   name?: Maybe<Scalars["String"]["output"]>;
-  patients?: Maybe<DepartmentPatientsConnection>;
-  patientsAggregate: Array<DepartmentPatientsAggregateResponse>;
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
 };
 
@@ -572,16 +572,6 @@ export type DepartmentHealthProvidersArgs = {
 
 export type DepartmentHealthProvidersAggregateArgs = {
   filter?: InputMaybe<HealthProviderAggregateFilter>;
-};
-
-export type DepartmentPatientsArgs = {
-  filter?: PatientFilter;
-  paging?: OffsetPaging;
-  sorting?: Array<PatientSort>;
-};
-
-export type DepartmentPatientsAggregateArgs = {
-  filter?: InputMaybe<PatientAggregateFilter>;
 };
 
 export type DepartmentAggregateFilter = {
@@ -800,7 +790,6 @@ export type DepartmentEdge = {
 
 export type DepartmentFilter = {
   and?: InputMaybe<Array<DepartmentFilter>>;
-  appointments?: InputMaybe<DepartmentFilterAppointmentFilter>;
   code?: InputMaybe<StringFieldComparison>;
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
@@ -811,24 +800,6 @@ export type DepartmentFilter = {
   updatedAt?: InputMaybe<DateFieldComparison>;
 };
 
-export type DepartmentFilterAppointmentFilter = {
-  and?: InputMaybe<Array<DepartmentFilterAppointmentFilter>>;
-  appointmentType?: InputMaybe<StringFieldComparison>;
-  createdAt?: InputMaybe<DateFieldComparison>;
-  deletedAt?: InputMaybe<DateFieldComparison>;
-  departmentId?: InputMaybe<NumberFieldComparison>;
-  doctorId?: InputMaybe<NumberFieldComparison>;
-  healthProviderId?: InputMaybe<NumberFieldComparison>;
-  id?: InputMaybe<IdFilterComparison>;
-  isActive?: InputMaybe<BooleanFieldComparison>;
-  or?: InputMaybe<Array<DepartmentFilterAppointmentFilter>>;
-  patientId?: InputMaybe<NumberFieldComparison>;
-  price?: InputMaybe<NumberFieldComparison>;
-  scheduleTime?: InputMaybe<DateFieldComparison>;
-  status?: InputMaybe<StringFieldComparison>;
-  updatedAt?: InputMaybe<DateFieldComparison>;
-};
-
 export type DepartmentHealthProvidersAggregateGroupBy = {
   __typename?: "DepartmentHealthProvidersAggregateGroupBy";
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
@@ -836,7 +807,6 @@ export type DepartmentHealthProvidersAggregateGroupBy = {
   description?: Maybe<Scalars["String"]["output"]>;
   district?: Maybe<Scalars["String"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
-  isFastTrack?: Maybe<Scalars["Boolean"]["output"]>;
   name?: Maybe<Scalars["String"]["output"]>;
   region?: Maybe<Scalars["String"]["output"]>;
   type?: Maybe<Scalars["String"]["output"]>;
@@ -875,7 +845,6 @@ export type DepartmentHealthProvidersCountAggregate = {
   description?: Maybe<Scalars["Int"]["output"]>;
   district?: Maybe<Scalars["Int"]["output"]>;
   id?: Maybe<Scalars["Int"]["output"]>;
-  isFastTrack?: Maybe<Scalars["Int"]["output"]>;
   name?: Maybe<Scalars["Int"]["output"]>;
   region?: Maybe<Scalars["Int"]["output"]>;
   type?: Maybe<Scalars["Int"]["output"]>;
@@ -935,74 +904,6 @@ export type DepartmentMinAggregate = {
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
 };
 
-export type DepartmentPatientsAggregateGroupBy = {
-  __typename?: "DepartmentPatientsAggregateGroupBy";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type DepartmentPatientsAggregateResponse = {
-  __typename?: "DepartmentPatientsAggregateResponse";
-  avg?: Maybe<DepartmentPatientsAvgAggregate>;
-  count?: Maybe<DepartmentPatientsCountAggregate>;
-  groupBy?: Maybe<DepartmentPatientsAggregateGroupBy>;
-  max?: Maybe<DepartmentPatientsMaxAggregate>;
-  min?: Maybe<DepartmentPatientsMinAggregate>;
-  sum?: Maybe<DepartmentPatientsSumAggregate>;
-};
-
-export type DepartmentPatientsAvgAggregate = {
-  __typename?: "DepartmentPatientsAvgAggregate";
-  id?: Maybe<Scalars["Float"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type DepartmentPatientsConnection = {
-  __typename?: "DepartmentPatientsConnection";
-  /** Array of nodes. */
-  nodes: Array<Patient>;
-  /** Paging information */
-  pageInfo: OffsetPageInfo;
-  /** Fetch total count of records */
-  totalCount: Scalars["Int"]["output"];
-};
-
-export type DepartmentPatientsCountAggregate = {
-  __typename?: "DepartmentPatientsCountAggregate";
-  createdAt?: Maybe<Scalars["Int"]["output"]>;
-  deletedAt?: Maybe<Scalars["Int"]["output"]>;
-  id?: Maybe<Scalars["Int"]["output"]>;
-  updatedAt?: Maybe<Scalars["Int"]["output"]>;
-  userProfileId?: Maybe<Scalars["Int"]["output"]>;
-};
-
-export type DepartmentPatientsMaxAggregate = {
-  __typename?: "DepartmentPatientsMaxAggregate";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type DepartmentPatientsMinAggregate = {
-  __typename?: "DepartmentPatientsMinAggregate";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type DepartmentPatientsSumAggregate = {
-  __typename?: "DepartmentPatientsSumAggregate";
-  id?: Maybe<Scalars["Float"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
 export type DepartmentSort = {
   direction: SortDirection;
   field: DepartmentSortFields;
@@ -1039,27 +940,24 @@ export type DepartmentUpdateFilter = {
 export type Doctor = {
   __typename?: "Doctor";
   availabilities?: Maybe<Array<Schedule>>;
-  availabilitiesAggregate: Array<DoctorAvailabilitiesAggregateResponse>;
   bio?: Maybe<Scalars["String"]["output"]>;
-  createdAt: Scalars["DateTime"]["output"];
-  deletedAt: Scalars["DateTime"]["output"];
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  department?: Maybe<Department>;
   departmentId: Scalars["Int"]["output"];
-  departments?: Maybe<DoctorDepartmentsConnection>;
-  departmentsAggregate: Array<DoctorDepartmentsAggregateResponse>;
   doctorType?: Maybe<DoctorType>;
   doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
   doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
   healthProviders?: Maybe<DoctorHealthProvidersConnection>;
-  healthProvidersAggregate: Array<DoctorHealthProvidersAggregateResponse>;
   id: Scalars["ID"]["output"];
   location?: Maybe<Scalars["String"]["output"]>;
-  patient?: Maybe<Patient>;
+  patients?: Maybe<Patient>;
   price?: Maybe<Scalars["Float"]["output"]>;
   ratings?: Maybe<Scalars["Float"]["output"]>;
   typeCategories?: Maybe<DoctorTypeCategory>;
-  updatedAt: Scalars["DateTime"]["output"];
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
   upload?: Maybe<Upload>;
-  uploadId: Scalars["Int"]["output"];
+  uploadId?: Maybe<Scalars["Int"]["output"]>;
   userProfile?: Maybe<UserProfile>;
   userProfileId?: Maybe<Scalars["Float"]["output"]>;
 };
@@ -1069,28 +967,10 @@ export type DoctorAvailabilitiesArgs = {
   sorting?: Array<ScheduleSort>;
 };
 
-export type DoctorAvailabilitiesAggregateArgs = {
-  filter?: InputMaybe<ScheduleAggregateFilter>;
-};
-
-export type DoctorDepartmentsArgs = {
-  filter?: DepartmentFilter;
-  paging?: OffsetPaging;
-  sorting?: Array<DepartmentSort>;
-};
-
-export type DoctorDepartmentsAggregateArgs = {
-  filter?: InputMaybe<DepartmentAggregateFilter>;
-};
-
 export type DoctorHealthProvidersArgs = {
   filter?: HealthProviderFilter;
   paging?: OffsetPaging;
   sorting?: Array<HealthProviderSort>;
-};
-
-export type DoctorHealthProvidersAggregateArgs = {
-  filter?: InputMaybe<HealthProviderAggregateFilter>;
 };
 
 export type DoctorAggregateFilter = {
@@ -1109,144 +989,6 @@ export type DoctorAggregateFilter = {
   updatedAt?: InputMaybe<DateFieldComparison>;
   uploadId?: InputMaybe<IntFieldComparison>;
   userProfileId?: InputMaybe<NumberFieldComparison>;
-};
-
-export type DoctorAggregateGroupBy = {
-  __typename?: "DoctorAggregateGroupBy";
-  bio?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  departmentId?: Maybe<Scalars["Int"]["output"]>;
-  doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  location?: Maybe<Scalars["String"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  ratings?: Maybe<Scalars["Float"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  uploadId?: Maybe<Scalars["Int"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type DoctorAggregateGroupByCreatedAtArgs = {
-  by?: GroupBy;
-};
-
-export type DoctorAggregateGroupByDeletedAtArgs = {
-  by?: GroupBy;
-};
-
-export type DoctorAggregateGroupByUpdatedAtArgs = {
-  by?: GroupBy;
-};
-
-export type DoctorAggregateResponse = {
-  __typename?: "DoctorAggregateResponse";
-  avg?: Maybe<DoctorAvgAggregate>;
-  count?: Maybe<DoctorCountAggregate>;
-  groupBy?: Maybe<DoctorAggregateGroupBy>;
-  max?: Maybe<DoctorMaxAggregate>;
-  min?: Maybe<DoctorMinAggregate>;
-  sum?: Maybe<DoctorSumAggregate>;
-};
-
-export type DoctorAvailabilitiesAggregateGroupBy = {
-  __typename?: "DoctorAvailabilitiesAggregateGroupBy";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  dayOfWeek?: Maybe<DaysOfWeek>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  doctorId?: Maybe<Scalars["Float"]["output"]>;
-  endTime?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  startTime?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type DoctorAvailabilitiesAggregateResponse = {
-  __typename?: "DoctorAvailabilitiesAggregateResponse";
-  avg?: Maybe<DoctorAvailabilitiesAvgAggregate>;
-  count?: Maybe<DoctorAvailabilitiesCountAggregate>;
-  groupBy?: Maybe<DoctorAvailabilitiesAggregateGroupBy>;
-  max?: Maybe<DoctorAvailabilitiesMaxAggregate>;
-  min?: Maybe<DoctorAvailabilitiesMinAggregate>;
-  sum?: Maybe<DoctorAvailabilitiesSumAggregate>;
-};
-
-export type DoctorAvailabilitiesAvgAggregate = {
-  __typename?: "DoctorAvailabilitiesAvgAggregate";
-  doctorId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type DoctorAvailabilitiesCountAggregate = {
-  __typename?: "DoctorAvailabilitiesCountAggregate";
-  createdAt?: Maybe<Scalars["Int"]["output"]>;
-  dayOfWeek?: Maybe<Scalars["Int"]["output"]>;
-  deletedAt?: Maybe<Scalars["Int"]["output"]>;
-  doctorId?: Maybe<Scalars["Int"]["output"]>;
-  endTime?: Maybe<Scalars["Int"]["output"]>;
-  id?: Maybe<Scalars["Int"]["output"]>;
-  startTime?: Maybe<Scalars["Int"]["output"]>;
-  updatedAt?: Maybe<Scalars["Int"]["output"]>;
-};
-
-export type DoctorAvailabilitiesMaxAggregate = {
-  __typename?: "DoctorAvailabilitiesMaxAggregate";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  dayOfWeek?: Maybe<DaysOfWeek>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  doctorId?: Maybe<Scalars["Float"]["output"]>;
-  endTime?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  startTime?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type DoctorAvailabilitiesMinAggregate = {
-  __typename?: "DoctorAvailabilitiesMinAggregate";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  dayOfWeek?: Maybe<DaysOfWeek>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  doctorId?: Maybe<Scalars["Float"]["output"]>;
-  endTime?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  startTime?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type DoctorAvailabilitiesSumAggregate = {
-  __typename?: "DoctorAvailabilitiesSumAggregate";
-  doctorId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type DoctorAvgAggregate = {
-  __typename?: "DoctorAvgAggregate";
-  departmentId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["Float"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  ratings?: Maybe<Scalars["Float"]["output"]>;
-  uploadId?: Maybe<Scalars["Float"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type DoctorCountAggregate = {
-  __typename?: "DoctorCountAggregate";
-  bio?: Maybe<Scalars["Int"]["output"]>;
-  createdAt?: Maybe<Scalars["Int"]["output"]>;
-  deletedAt?: Maybe<Scalars["Int"]["output"]>;
-  departmentId?: Maybe<Scalars["Int"]["output"]>;
-  doctorTypeCategoryId?: Maybe<Scalars["Int"]["output"]>;
-  doctorTypeId?: Maybe<Scalars["Int"]["output"]>;
-  id?: Maybe<Scalars["Int"]["output"]>;
-  location?: Maybe<Scalars["Int"]["output"]>;
-  price?: Maybe<Scalars["Int"]["output"]>;
-  ratings?: Maybe<Scalars["Int"]["output"]>;
-  updatedAt?: Maybe<Scalars["Int"]["output"]>;
-  uploadId?: Maybe<Scalars["Int"]["output"]>;
-  userProfileId?: Maybe<Scalars["Int"]["output"]>;
 };
 
 export type DoctorDeleteFilter = {
@@ -1284,86 +1026,13 @@ export type DoctorDeleteResponse = {
   userProfileId?: Maybe<Scalars["Float"]["output"]>;
 };
 
-export type DoctorDepartmentsAggregateGroupBy = {
-  __typename?: "DoctorDepartmentsAggregateGroupBy";
-  code?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type DoctorDepartmentsAggregateResponse = {
-  __typename?: "DoctorDepartmentsAggregateResponse";
-  avg?: Maybe<DoctorDepartmentsAvgAggregate>;
-  count?: Maybe<DoctorDepartmentsCountAggregate>;
-  groupBy?: Maybe<DoctorDepartmentsAggregateGroupBy>;
-  max?: Maybe<DoctorDepartmentsMaxAggregate>;
-  min?: Maybe<DoctorDepartmentsMinAggregate>;
-  sum?: Maybe<DoctorDepartmentsSumAggregate>;
-};
-
-export type DoctorDepartmentsAvgAggregate = {
-  __typename?: "DoctorDepartmentsAvgAggregate";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type DoctorDepartmentsConnection = {
-  __typename?: "DoctorDepartmentsConnection";
-  /** Array of nodes. */
-  nodes: Array<Department>;
-  /** Paging information */
-  pageInfo: OffsetPageInfo;
-  /** Fetch total count of records */
-  totalCount: Scalars["Int"]["output"];
-};
-
-export type DoctorDepartmentsCountAggregate = {
-  __typename?: "DoctorDepartmentsCountAggregate";
-  code?: Maybe<Scalars["Int"]["output"]>;
-  createdAt?: Maybe<Scalars["Int"]["output"]>;
-  deletedAt?: Maybe<Scalars["Int"]["output"]>;
-  description?: Maybe<Scalars["Int"]["output"]>;
-  id?: Maybe<Scalars["Int"]["output"]>;
-  name?: Maybe<Scalars["Int"]["output"]>;
-  updatedAt?: Maybe<Scalars["Int"]["output"]>;
-};
-
-export type DoctorDepartmentsMaxAggregate = {
-  __typename?: "DoctorDepartmentsMaxAggregate";
-  code?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type DoctorDepartmentsMinAggregate = {
-  __typename?: "DoctorDepartmentsMinAggregate";
-  code?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type DoctorDepartmentsSumAggregate = {
-  __typename?: "DoctorDepartmentsSumAggregate";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
 export type DoctorFilter = {
   and?: InputMaybe<Array<DoctorFilter>>;
   availabilities?: InputMaybe<DoctorFilterScheduleFilter>;
   bio?: InputMaybe<StringFieldComparison>;
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
+  department?: InputMaybe<DoctorFilterDepartmentFilter>;
   departmentId?: InputMaybe<IntFieldComparison>;
   doctorType?: InputMaybe<DoctorFilterDoctorTypeFilter>;
   doctorTypeCategoryId?: InputMaybe<NumberFieldComparison>;
@@ -1371,7 +1040,7 @@ export type DoctorFilter = {
   id?: InputMaybe<IdFilterComparison>;
   location?: InputMaybe<StringFieldComparison>;
   or?: InputMaybe<Array<DoctorFilter>>;
-  patient?: InputMaybe<DoctorFilterPatientFilter>;
+  patients?: InputMaybe<DoctorFilterPatientFilter>;
   price?: InputMaybe<NumberFieldComparison>;
   ratings?: InputMaybe<NumberFieldComparison>;
   typeCategories?: InputMaybe<DoctorFilterDoctorTypeCategoryFilter>;
@@ -1380,6 +1049,18 @@ export type DoctorFilter = {
   uploadId?: InputMaybe<IntFieldComparison>;
   userProfile?: InputMaybe<DoctorFilterUserProfileFilter>;
   userProfileId?: InputMaybe<NumberFieldComparison>;
+};
+
+export type DoctorFilterDepartmentFilter = {
+  and?: InputMaybe<Array<DoctorFilterDepartmentFilter>>;
+  code?: InputMaybe<StringFieldComparison>;
+  createdAt?: InputMaybe<DateFieldComparison>;
+  deletedAt?: InputMaybe<DateFieldComparison>;
+  description?: InputMaybe<StringFieldComparison>;
+  id?: InputMaybe<IdFilterComparison>;
+  name?: InputMaybe<StringFieldComparison>;
+  or?: InputMaybe<Array<DoctorFilterDepartmentFilter>>;
+  updatedAt?: InputMaybe<DateFieldComparison>;
 };
 
 export type DoctorFilterDoctorTypeCategoryFilter = {
@@ -1424,6 +1105,7 @@ export type DoctorFilterScheduleFilter = {
   doctorId?: InputMaybe<NumberFieldComparison>;
   endTime?: InputMaybe<StringFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
+  isFull?: InputMaybe<BooleanFieldComparison>;
   or?: InputMaybe<Array<DoctorFilterScheduleFilter>>;
   startTime?: InputMaybe<StringFieldComparison>;
   updatedAt?: InputMaybe<DateFieldComparison>;
@@ -1461,35 +1143,6 @@ export type DoctorFilterUserProfileFilter = {
   username?: InputMaybe<StringFieldComparison>;
 };
 
-export type DoctorHealthProvidersAggregateGroupBy = {
-  __typename?: "DoctorHealthProvidersAggregateGroupBy";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  district?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  isFastTrack?: Maybe<Scalars["Boolean"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  region?: Maybe<Scalars["String"]["output"]>;
-  type?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type DoctorHealthProvidersAggregateResponse = {
-  __typename?: "DoctorHealthProvidersAggregateResponse";
-  avg?: Maybe<DoctorHealthProvidersAvgAggregate>;
-  count?: Maybe<DoctorHealthProvidersCountAggregate>;
-  groupBy?: Maybe<DoctorHealthProvidersAggregateGroupBy>;
-  max?: Maybe<DoctorHealthProvidersMaxAggregate>;
-  min?: Maybe<DoctorHealthProvidersMinAggregate>;
-  sum?: Maybe<DoctorHealthProvidersSumAggregate>;
-};
-
-export type DoctorHealthProvidersAvgAggregate = {
-  __typename?: "DoctorHealthProvidersAvgAggregate";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
 export type DoctorHealthProvidersConnection = {
   __typename?: "DoctorHealthProvidersConnection";
   /** Array of nodes. */
@@ -1500,90 +1153,10 @@ export type DoctorHealthProvidersConnection = {
   totalCount: Scalars["Int"]["output"];
 };
 
-export type DoctorHealthProvidersCountAggregate = {
-  __typename?: "DoctorHealthProvidersCountAggregate";
-  createdAt?: Maybe<Scalars["Int"]["output"]>;
-  deletedAt?: Maybe<Scalars["Int"]["output"]>;
-  description?: Maybe<Scalars["Int"]["output"]>;
-  district?: Maybe<Scalars["Int"]["output"]>;
-  id?: Maybe<Scalars["Int"]["output"]>;
-  isFastTrack?: Maybe<Scalars["Int"]["output"]>;
-  name?: Maybe<Scalars["Int"]["output"]>;
-  region?: Maybe<Scalars["Int"]["output"]>;
-  type?: Maybe<Scalars["Int"]["output"]>;
-  updatedAt?: Maybe<Scalars["Int"]["output"]>;
-};
-
-export type DoctorHealthProvidersMaxAggregate = {
-  __typename?: "DoctorHealthProvidersMaxAggregate";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  district?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  region?: Maybe<Scalars["String"]["output"]>;
-  type?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type DoctorHealthProvidersMinAggregate = {
-  __typename?: "DoctorHealthProvidersMinAggregate";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  district?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  region?: Maybe<Scalars["String"]["output"]>;
-  type?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type DoctorHealthProvidersSumAggregate = {
-  __typename?: "DoctorHealthProvidersSumAggregate";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type DoctorMaxAggregate = {
-  __typename?: "DoctorMaxAggregate";
-  bio?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  departmentId?: Maybe<Scalars["Int"]["output"]>;
-  doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  location?: Maybe<Scalars["String"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  ratings?: Maybe<Scalars["Float"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  uploadId?: Maybe<Scalars["Int"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type DoctorMinAggregate = {
-  __typename?: "DoctorMinAggregate";
-  bio?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  departmentId?: Maybe<Scalars["Int"]["output"]>;
-  doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  location?: Maybe<Scalars["String"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  ratings?: Maybe<Scalars["Float"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  uploadId?: Maybe<Scalars["Int"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
 export type DoctorScheduleDto = {
   dayOfWeek?: InputMaybe<Scalars["String"]["input"]>;
   doctorId?: InputMaybe<Scalars["Float"]["input"]>;
-  endTime?: InputMaybe<Scalars["String"]["input"]>;
-  startTime?: InputMaybe<Scalars["String"]["input"]>;
+  timeslots?: InputMaybe<Array<TimeSlot>>;
 };
 
 export type DoctorSort = {
@@ -1607,18 +1180,6 @@ export enum DoctorSortFields {
   UploadId = "uploadId",
   UserProfileId = "userProfileId",
 }
-
-export type DoctorSumAggregate = {
-  __typename?: "DoctorSumAggregate";
-  departmentId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["Float"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  ratings?: Maybe<Scalars["Float"]["output"]>;
-  uploadId?: Maybe<Scalars["Float"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
 
 export type DoctorType = {
   __typename?: "DoctorType";
@@ -1890,35 +1451,19 @@ export enum GroupBy {
 
 export type HealthProvider = {
   __typename?: "HealthProvider";
-  appointments?: Maybe<Array<Appointment>>;
-  appointmentsAggregate: Array<HealthProviderAppointmentsAggregateResponse>;
-  createdAt: Scalars["DateTime"]["output"];
-  deletedAt: Scalars["DateTime"]["output"];
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
   departments?: Maybe<Array<Department>>;
-  departmentsAggregate: Array<HealthProviderDepartmentsAggregateResponse>;
   description?: Maybe<Scalars["String"]["output"]>;
   district?: Maybe<Scalars["String"]["output"]>;
   doctors?: Maybe<Array<Doctor>>;
-  doctorsAggregate: Array<HealthProviderDoctorsAggregateResponse>;
   id: Scalars["ID"]["output"];
-  isFastTrack?: Maybe<Scalars["Boolean"]["output"]>;
   /** Location with longitude and latitude */
   location?: Maybe<Location>;
   name?: Maybe<Scalars["String"]["output"]>;
-  patients?: Maybe<Array<Patient>>;
-  patientsAggregate: Array<HealthProviderPatientsAggregateResponse>;
   region?: Maybe<Scalars["String"]["output"]>;
   type?: Maybe<Scalars["String"]["output"]>;
-  updatedAt: Scalars["DateTime"]["output"];
-};
-
-export type HealthProviderAppointmentsArgs = {
-  filter?: AppointmentFilter;
-  sorting?: Array<AppointmentSort>;
-};
-
-export type HealthProviderAppointmentsAggregateArgs = {
-  filter?: InputMaybe<AppointmentAggregateFilter>;
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
 };
 
 export type HealthProviderDepartmentsArgs = {
@@ -1926,26 +1471,9 @@ export type HealthProviderDepartmentsArgs = {
   sorting?: Array<DepartmentSort>;
 };
 
-export type HealthProviderDepartmentsAggregateArgs = {
-  filter?: InputMaybe<DepartmentAggregateFilter>;
-};
-
 export type HealthProviderDoctorsArgs = {
   filter?: DoctorFilter;
   sorting?: Array<DoctorSort>;
-};
-
-export type HealthProviderDoctorsAggregateArgs = {
-  filter?: InputMaybe<DoctorAggregateFilter>;
-};
-
-export type HealthProviderPatientsArgs = {
-  filter?: PatientFilter;
-  sorting?: Array<PatientSort>;
-};
-
-export type HealthProviderPatientsAggregateArgs = {
-  filter?: InputMaybe<PatientAggregateFilter>;
 };
 
 export type HealthProviderAggregateFilter = {
@@ -1955,149 +1483,11 @@ export type HealthProviderAggregateFilter = {
   description?: InputMaybe<StringFieldComparison>;
   district?: InputMaybe<StringFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
-  isFastTrack?: InputMaybe<BooleanFieldComparison>;
   name?: InputMaybe<StringFieldComparison>;
   or?: InputMaybe<Array<HealthProviderAggregateFilter>>;
   region?: InputMaybe<StringFieldComparison>;
   type?: InputMaybe<StringFieldComparison>;
   updatedAt?: InputMaybe<DateFieldComparison>;
-};
-
-export type HealthProviderAggregateGroupBy = {
-  __typename?: "HealthProviderAggregateGroupBy";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  district?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  isFastTrack?: Maybe<Scalars["Boolean"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  region?: Maybe<Scalars["String"]["output"]>;
-  type?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type HealthProviderAggregateGroupByCreatedAtArgs = {
-  by?: GroupBy;
-};
-
-export type HealthProviderAggregateGroupByDeletedAtArgs = {
-  by?: GroupBy;
-};
-
-export type HealthProviderAggregateGroupByUpdatedAtArgs = {
-  by?: GroupBy;
-};
-
-export type HealthProviderAggregateResponse = {
-  __typename?: "HealthProviderAggregateResponse";
-  avg?: Maybe<HealthProviderAvgAggregate>;
-  count?: Maybe<HealthProviderCountAggregate>;
-  groupBy?: Maybe<HealthProviderAggregateGroupBy>;
-  max?: Maybe<HealthProviderMaxAggregate>;
-  min?: Maybe<HealthProviderMinAggregate>;
-  sum?: Maybe<HealthProviderSumAggregate>;
-};
-
-export type HealthProviderAppointmentsAggregateGroupBy = {
-  __typename?: "HealthProviderAppointmentsAggregateGroupBy";
-  appointmentType?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  departmentId?: Maybe<Scalars["Float"]["output"]>;
-  doctorId?: Maybe<Scalars["Float"]["output"]>;
-  healthProviderId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  isActive?: Maybe<Scalars["Boolean"]["output"]>;
-  patientId?: Maybe<Scalars["Float"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
-  status?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type HealthProviderAppointmentsAggregateResponse = {
-  __typename?: "HealthProviderAppointmentsAggregateResponse";
-  avg?: Maybe<HealthProviderAppointmentsAvgAggregate>;
-  count?: Maybe<HealthProviderAppointmentsCountAggregate>;
-  groupBy?: Maybe<HealthProviderAppointmentsAggregateGroupBy>;
-  max?: Maybe<HealthProviderAppointmentsMaxAggregate>;
-  min?: Maybe<HealthProviderAppointmentsMinAggregate>;
-  sum?: Maybe<HealthProviderAppointmentsSumAggregate>;
-};
-
-export type HealthProviderAppointmentsAvgAggregate = {
-  __typename?: "HealthProviderAppointmentsAvgAggregate";
-  departmentId?: Maybe<Scalars["Float"]["output"]>;
-  doctorId?: Maybe<Scalars["Float"]["output"]>;
-  healthProviderId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["Float"]["output"]>;
-  patientId?: Maybe<Scalars["Float"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type HealthProviderAppointmentsCountAggregate = {
-  __typename?: "HealthProviderAppointmentsCountAggregate";
-  appointmentType?: Maybe<Scalars["Int"]["output"]>;
-  createdAt?: Maybe<Scalars["Int"]["output"]>;
-  deletedAt?: Maybe<Scalars["Int"]["output"]>;
-  departmentId?: Maybe<Scalars["Int"]["output"]>;
-  doctorId?: Maybe<Scalars["Int"]["output"]>;
-  healthProviderId?: Maybe<Scalars["Int"]["output"]>;
-  id?: Maybe<Scalars["Int"]["output"]>;
-  isActive?: Maybe<Scalars["Int"]["output"]>;
-  patientId?: Maybe<Scalars["Int"]["output"]>;
-  price?: Maybe<Scalars["Int"]["output"]>;
-  scheduleTime?: Maybe<Scalars["Int"]["output"]>;
-  status?: Maybe<Scalars["Int"]["output"]>;
-  updatedAt?: Maybe<Scalars["Int"]["output"]>;
-};
-
-export type HealthProviderAppointmentsMaxAggregate = {
-  __typename?: "HealthProviderAppointmentsMaxAggregate";
-  appointmentType?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  departmentId?: Maybe<Scalars["Float"]["output"]>;
-  doctorId?: Maybe<Scalars["Float"]["output"]>;
-  healthProviderId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  patientId?: Maybe<Scalars["Float"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
-  status?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type HealthProviderAppointmentsMinAggregate = {
-  __typename?: "HealthProviderAppointmentsMinAggregate";
-  appointmentType?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  departmentId?: Maybe<Scalars["Float"]["output"]>;
-  doctorId?: Maybe<Scalars["Float"]["output"]>;
-  healthProviderId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  patientId?: Maybe<Scalars["Float"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
-  status?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type HealthProviderAppointmentsSumAggregate = {
-  __typename?: "HealthProviderAppointmentsSumAggregate";
-  departmentId?: Maybe<Scalars["Float"]["output"]>;
-  doctorId?: Maybe<Scalars["Float"]["output"]>;
-  healthProviderId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["Float"]["output"]>;
-  patientId?: Maybe<Scalars["Float"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type HealthProviderAvgAggregate = {
-  __typename?: "HealthProviderAvgAggregate";
-  id?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type HealthProviderConnection = {
@@ -2110,20 +1500,6 @@ export type HealthProviderConnection = {
   totalCount: Scalars["Int"]["output"];
 };
 
-export type HealthProviderCountAggregate = {
-  __typename?: "HealthProviderCountAggregate";
-  createdAt?: Maybe<Scalars["Int"]["output"]>;
-  deletedAt?: Maybe<Scalars["Int"]["output"]>;
-  description?: Maybe<Scalars["Int"]["output"]>;
-  district?: Maybe<Scalars["Int"]["output"]>;
-  id?: Maybe<Scalars["Int"]["output"]>;
-  isFastTrack?: Maybe<Scalars["Int"]["output"]>;
-  name?: Maybe<Scalars["Int"]["output"]>;
-  region?: Maybe<Scalars["Int"]["output"]>;
-  type?: Maybe<Scalars["Int"]["output"]>;
-  updatedAt?: Maybe<Scalars["Int"]["output"]>;
-};
-
 export type HealthProviderDeleteFilter = {
   and?: InputMaybe<Array<HealthProviderDeleteFilter>>;
   createdAt?: InputMaybe<DateFieldComparison>;
@@ -2131,7 +1507,6 @@ export type HealthProviderDeleteFilter = {
   description?: InputMaybe<StringFieldComparison>;
   district?: InputMaybe<StringFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
-  isFastTrack?: InputMaybe<BooleanFieldComparison>;
   name?: InputMaybe<StringFieldComparison>;
   or?: InputMaybe<Array<HealthProviderDeleteFilter>>;
   region?: InputMaybe<StringFieldComparison>;
@@ -2146,179 +1521,12 @@ export type HealthProviderDeleteResponse = {
   description?: Maybe<Scalars["String"]["output"]>;
   district?: Maybe<Scalars["String"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
-  isFastTrack?: Maybe<Scalars["Boolean"]["output"]>;
   /** Location with longitude and latitude */
   location?: Maybe<Location>;
   name?: Maybe<Scalars["String"]["output"]>;
   region?: Maybe<Scalars["String"]["output"]>;
   type?: Maybe<Scalars["String"]["output"]>;
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type HealthProviderDepartmentsAggregateGroupBy = {
-  __typename?: "HealthProviderDepartmentsAggregateGroupBy";
-  code?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type HealthProviderDepartmentsAggregateResponse = {
-  __typename?: "HealthProviderDepartmentsAggregateResponse";
-  avg?: Maybe<HealthProviderDepartmentsAvgAggregate>;
-  count?: Maybe<HealthProviderDepartmentsCountAggregate>;
-  groupBy?: Maybe<HealthProviderDepartmentsAggregateGroupBy>;
-  max?: Maybe<HealthProviderDepartmentsMaxAggregate>;
-  min?: Maybe<HealthProviderDepartmentsMinAggregate>;
-  sum?: Maybe<HealthProviderDepartmentsSumAggregate>;
-};
-
-export type HealthProviderDepartmentsAvgAggregate = {
-  __typename?: "HealthProviderDepartmentsAvgAggregate";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type HealthProviderDepartmentsCountAggregate = {
-  __typename?: "HealthProviderDepartmentsCountAggregate";
-  code?: Maybe<Scalars["Int"]["output"]>;
-  createdAt?: Maybe<Scalars["Int"]["output"]>;
-  deletedAt?: Maybe<Scalars["Int"]["output"]>;
-  description?: Maybe<Scalars["Int"]["output"]>;
-  id?: Maybe<Scalars["Int"]["output"]>;
-  name?: Maybe<Scalars["Int"]["output"]>;
-  updatedAt?: Maybe<Scalars["Int"]["output"]>;
-};
-
-export type HealthProviderDepartmentsMaxAggregate = {
-  __typename?: "HealthProviderDepartmentsMaxAggregate";
-  code?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type HealthProviderDepartmentsMinAggregate = {
-  __typename?: "HealthProviderDepartmentsMinAggregate";
-  code?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type HealthProviderDepartmentsSumAggregate = {
-  __typename?: "HealthProviderDepartmentsSumAggregate";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type HealthProviderDoctorsAggregateGroupBy = {
-  __typename?: "HealthProviderDoctorsAggregateGroupBy";
-  bio?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  departmentId?: Maybe<Scalars["Int"]["output"]>;
-  doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  location?: Maybe<Scalars["String"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  ratings?: Maybe<Scalars["Float"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  uploadId?: Maybe<Scalars["Int"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type HealthProviderDoctorsAggregateResponse = {
-  __typename?: "HealthProviderDoctorsAggregateResponse";
-  avg?: Maybe<HealthProviderDoctorsAvgAggregate>;
-  count?: Maybe<HealthProviderDoctorsCountAggregate>;
-  groupBy?: Maybe<HealthProviderDoctorsAggregateGroupBy>;
-  max?: Maybe<HealthProviderDoctorsMaxAggregate>;
-  min?: Maybe<HealthProviderDoctorsMinAggregate>;
-  sum?: Maybe<HealthProviderDoctorsSumAggregate>;
-};
-
-export type HealthProviderDoctorsAvgAggregate = {
-  __typename?: "HealthProviderDoctorsAvgAggregate";
-  departmentId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["Float"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  ratings?: Maybe<Scalars["Float"]["output"]>;
-  uploadId?: Maybe<Scalars["Float"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type HealthProviderDoctorsCountAggregate = {
-  __typename?: "HealthProviderDoctorsCountAggregate";
-  bio?: Maybe<Scalars["Int"]["output"]>;
-  createdAt?: Maybe<Scalars["Int"]["output"]>;
-  deletedAt?: Maybe<Scalars["Int"]["output"]>;
-  departmentId?: Maybe<Scalars["Int"]["output"]>;
-  doctorTypeCategoryId?: Maybe<Scalars["Int"]["output"]>;
-  doctorTypeId?: Maybe<Scalars["Int"]["output"]>;
-  id?: Maybe<Scalars["Int"]["output"]>;
-  location?: Maybe<Scalars["Int"]["output"]>;
-  price?: Maybe<Scalars["Int"]["output"]>;
-  ratings?: Maybe<Scalars["Int"]["output"]>;
-  updatedAt?: Maybe<Scalars["Int"]["output"]>;
-  uploadId?: Maybe<Scalars["Int"]["output"]>;
-  userProfileId?: Maybe<Scalars["Int"]["output"]>;
-};
-
-export type HealthProviderDoctorsMaxAggregate = {
-  __typename?: "HealthProviderDoctorsMaxAggregate";
-  bio?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  departmentId?: Maybe<Scalars["Int"]["output"]>;
-  doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  location?: Maybe<Scalars["String"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  ratings?: Maybe<Scalars["Float"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  uploadId?: Maybe<Scalars["Int"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type HealthProviderDoctorsMinAggregate = {
-  __typename?: "HealthProviderDoctorsMinAggregate";
-  bio?: Maybe<Scalars["String"]["output"]>;
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  departmentId?: Maybe<Scalars["Int"]["output"]>;
-  doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  location?: Maybe<Scalars["String"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  ratings?: Maybe<Scalars["Float"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  uploadId?: Maybe<Scalars["Int"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type HealthProviderDoctorsSumAggregate = {
-  __typename?: "HealthProviderDoctorsSumAggregate";
-  departmentId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeCategoryId?: Maybe<Scalars["Float"]["output"]>;
-  doctorTypeId?: Maybe<Scalars["Float"]["output"]>;
-  id?: Maybe<Scalars["Float"]["output"]>;
-  price?: Maybe<Scalars["Float"]["output"]>;
-  ratings?: Maybe<Scalars["Float"]["output"]>;
-  uploadId?: Maybe<Scalars["Float"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type HealthProviderEdge = {
@@ -2331,7 +1539,6 @@ export type HealthProviderEdge = {
 
 export type HealthProviderFilter = {
   and?: InputMaybe<Array<HealthProviderFilter>>;
-  appointments?: InputMaybe<HealthProviderFilterAppointmentFilter>;
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
   departments?: InputMaybe<HealthProviderFilterDepartmentFilter>;
@@ -2339,30 +1546,10 @@ export type HealthProviderFilter = {
   district?: InputMaybe<StringFieldComparison>;
   doctors?: InputMaybe<HealthProviderFilterDoctorFilter>;
   id?: InputMaybe<IdFilterComparison>;
-  isFastTrack?: InputMaybe<BooleanFieldComparison>;
   name?: InputMaybe<StringFieldComparison>;
   or?: InputMaybe<Array<HealthProviderFilter>>;
-  patients?: InputMaybe<HealthProviderFilterPatientFilter>;
   region?: InputMaybe<StringFieldComparison>;
   type?: InputMaybe<StringFieldComparison>;
-  updatedAt?: InputMaybe<DateFieldComparison>;
-};
-
-export type HealthProviderFilterAppointmentFilter = {
-  and?: InputMaybe<Array<HealthProviderFilterAppointmentFilter>>;
-  appointmentType?: InputMaybe<StringFieldComparison>;
-  createdAt?: InputMaybe<DateFieldComparison>;
-  deletedAt?: InputMaybe<DateFieldComparison>;
-  departmentId?: InputMaybe<NumberFieldComparison>;
-  doctorId?: InputMaybe<NumberFieldComparison>;
-  healthProviderId?: InputMaybe<NumberFieldComparison>;
-  id?: InputMaybe<IdFilterComparison>;
-  isActive?: InputMaybe<BooleanFieldComparison>;
-  or?: InputMaybe<Array<HealthProviderFilterAppointmentFilter>>;
-  patientId?: InputMaybe<NumberFieldComparison>;
-  price?: InputMaybe<NumberFieldComparison>;
-  scheduleTime?: InputMaybe<DateFieldComparison>;
-  status?: InputMaybe<StringFieldComparison>;
   updatedAt?: InputMaybe<DateFieldComparison>;
 };
 
@@ -2396,100 +1583,6 @@ export type HealthProviderFilterDoctorFilter = {
   userProfileId?: InputMaybe<NumberFieldComparison>;
 };
 
-export type HealthProviderFilterPatientFilter = {
-  and?: InputMaybe<Array<HealthProviderFilterPatientFilter>>;
-  createdAt?: InputMaybe<DateFieldComparison>;
-  deletedAt?: InputMaybe<DateFieldComparison>;
-  id?: InputMaybe<IdFilterComparison>;
-  or?: InputMaybe<Array<HealthProviderFilterPatientFilter>>;
-  updatedAt?: InputMaybe<DateFieldComparison>;
-  userProfileId?: InputMaybe<NumberFieldComparison>;
-};
-
-export type HealthProviderMaxAggregate = {
-  __typename?: "HealthProviderMaxAggregate";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  district?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  region?: Maybe<Scalars["String"]["output"]>;
-  type?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type HealthProviderMinAggregate = {
-  __typename?: "HealthProviderMinAggregate";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  description?: Maybe<Scalars["String"]["output"]>;
-  district?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  name?: Maybe<Scalars["String"]["output"]>;
-  region?: Maybe<Scalars["String"]["output"]>;
-  type?: Maybe<Scalars["String"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type HealthProviderPatientsAggregateGroupBy = {
-  __typename?: "HealthProviderPatientsAggregateGroupBy";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type HealthProviderPatientsAggregateResponse = {
-  __typename?: "HealthProviderPatientsAggregateResponse";
-  avg?: Maybe<HealthProviderPatientsAvgAggregate>;
-  count?: Maybe<HealthProviderPatientsCountAggregate>;
-  groupBy?: Maybe<HealthProviderPatientsAggregateGroupBy>;
-  max?: Maybe<HealthProviderPatientsMaxAggregate>;
-  min?: Maybe<HealthProviderPatientsMinAggregate>;
-  sum?: Maybe<HealthProviderPatientsSumAggregate>;
-};
-
-export type HealthProviderPatientsAvgAggregate = {
-  __typename?: "HealthProviderPatientsAvgAggregate";
-  id?: Maybe<Scalars["Float"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type HealthProviderPatientsCountAggregate = {
-  __typename?: "HealthProviderPatientsCountAggregate";
-  createdAt?: Maybe<Scalars["Int"]["output"]>;
-  deletedAt?: Maybe<Scalars["Int"]["output"]>;
-  id?: Maybe<Scalars["Int"]["output"]>;
-  updatedAt?: Maybe<Scalars["Int"]["output"]>;
-  userProfileId?: Maybe<Scalars["Int"]["output"]>;
-};
-
-export type HealthProviderPatientsMaxAggregate = {
-  __typename?: "HealthProviderPatientsMaxAggregate";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type HealthProviderPatientsMinAggregate = {
-  __typename?: "HealthProviderPatientsMinAggregate";
-  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
-  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  id?: Maybe<Scalars["ID"]["output"]>;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
-export type HealthProviderPatientsSumAggregate = {
-  __typename?: "HealthProviderPatientsSumAggregate";
-  id?: Maybe<Scalars["Float"]["output"]>;
-  userProfileId?: Maybe<Scalars["Float"]["output"]>;
-};
-
 export type HealthProviderSort = {
   direction: SortDirection;
   field: HealthProviderSortFields;
@@ -2502,17 +1595,11 @@ export enum HealthProviderSortFields {
   Description = "description",
   District = "district",
   Id = "id",
-  IsFastTrack = "isFastTrack",
   Name = "name",
   Region = "region",
   Type = "type",
   UpdatedAt = "updatedAt",
 }
-
-export type HealthProviderSumAggregate = {
-  __typename?: "HealthProviderSumAggregate";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
 
 export type HealthProviderUpdateFilter = {
   and?: InputMaybe<Array<HealthProviderUpdateFilter>>;
@@ -2521,7 +1608,6 @@ export type HealthProviderUpdateFilter = {
   description?: InputMaybe<StringFieldComparison>;
   district?: InputMaybe<StringFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
-  isFastTrack?: InputMaybe<BooleanFieldComparison>;
   name?: InputMaybe<StringFieldComparison>;
   or?: InputMaybe<Array<HealthProviderUpdateFilter>>;
   region?: InputMaybe<StringFieldComparison>;
@@ -2615,12 +1701,15 @@ export type Mutation = {
   forgetPassword: ForgetPasswordResponse;
   login: LoginResponseDto;
   logout: Scalars["Boolean"]["output"];
+  payForAppointment: TransactionPaymentResult;
   rateDoctor: Scalars["Boolean"]["output"];
   /** Register with either email or phoneNumber */
   requestLoginOtp: OtpResponse;
-  setDoctor: Scalars["Boolean"]["output"];
+  setAppointmentProviderAndDepartment: Appointment;
+  setDoctor: Doctor;
   setDoctorAvailability: Doctor;
   setDoctorProfile: Doctor;
+  setDoctorToAppointment: Appointment;
   updateManyDepartments: UpdateManyResponse;
   updateManyDoctorTypeCategories: UpdateManyResponse;
   updateManyDoctorTypes: UpdateManyResponse;
@@ -2739,12 +1828,20 @@ export type MutationLoginArgs = {
   password: Scalars["String"]["input"];
 };
 
+export type MutationPayForAppointmentArgs = {
+  input: PayAppointmentDto;
+};
+
 export type MutationRateDoctorArgs = {
   input: RateDoctorDto;
 };
 
 export type MutationRequestLoginOtpArgs = {
   input: OtpRequest;
+};
+
+export type MutationSetAppointmentProviderAndDepartmentArgs = {
+  input: SetProviderDepartmentDto;
 };
 
 export type MutationSetDoctorArgs = {
@@ -2757,6 +1854,10 @@ export type MutationSetDoctorAvailabilityArgs = {
 
 export type MutationSetDoctorProfileArgs = {
   input: SetDoctorTypeDto;
+};
+
+export type MutationSetDoctorToAppointmentArgs = {
+  input: SetDoctorToAppointmentDto;
 };
 
 export type MutationUpdateManyDepartmentsArgs = {
@@ -2866,6 +1967,8 @@ export type Patient = {
   healthProviders?: Maybe<PatientHealthProvidersConnection>;
   healthProvidersAggregate: Array<PatientHealthProvidersAggregateResponse>;
   id: Scalars["ID"]["output"];
+  transactions?: Maybe<PatientTransactionsConnection>;
+  transactionsAggregate: Array<PatientTransactionsAggregateResponse>;
   updatedAt: Scalars["DateTime"]["output"];
   userProfile?: Maybe<UserProfile>;
   userProfileId?: Maybe<Scalars["Float"]["output"]>;
@@ -2909,6 +2012,16 @@ export type PatientHealthProvidersArgs = {
 
 export type PatientHealthProvidersAggregateArgs = {
   filter?: InputMaybe<HealthProviderAggregateFilter>;
+};
+
+export type PatientTransactionsArgs = {
+  filter?: TransactionFilter;
+  paging?: OffsetPaging;
+  sorting?: Array<TransactionSort>;
+};
+
+export type PatientTransactionsAggregateArgs = {
+  filter?: InputMaybe<TransactionAggregateFilter>;
 };
 
 export type PatientAggregateFilter = {
@@ -2966,6 +2079,7 @@ export type PatientAppointmentsAggregateGroupBy = {
   price?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
 };
 
@@ -3013,6 +2127,7 @@ export type PatientAppointmentsCountAggregate = {
   price?: Maybe<Scalars["Int"]["output"]>;
   scheduleTime?: Maybe<Scalars["Int"]["output"]>;
   status?: Maybe<Scalars["Int"]["output"]>;
+  transactionId?: Maybe<Scalars["Int"]["output"]>;
   updatedAt?: Maybe<Scalars["Int"]["output"]>;
 };
 
@@ -3029,6 +2144,7 @@ export type PatientAppointmentsMaxAggregate = {
   price?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
 };
 
@@ -3045,6 +2161,7 @@ export type PatientAppointmentsMinAggregate = {
   price?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
 };
 
@@ -3315,7 +2432,6 @@ export type PatientHealthProvidersAggregateGroupBy = {
   description?: Maybe<Scalars["String"]["output"]>;
   district?: Maybe<Scalars["String"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
-  isFastTrack?: Maybe<Scalars["Boolean"]["output"]>;
   name?: Maybe<Scalars["String"]["output"]>;
   region?: Maybe<Scalars["String"]["output"]>;
   type?: Maybe<Scalars["String"]["output"]>;
@@ -3354,7 +2470,6 @@ export type PatientHealthProvidersCountAggregate = {
   description?: Maybe<Scalars["Int"]["output"]>;
   district?: Maybe<Scalars["Int"]["output"]>;
   id?: Maybe<Scalars["Int"]["output"]>;
-  isFastTrack?: Maybe<Scalars["Int"]["output"]>;
   name?: Maybe<Scalars["Int"]["output"]>;
   region?: Maybe<Scalars["Int"]["output"]>;
   type?: Maybe<Scalars["Int"]["output"]>;
@@ -3430,6 +2545,102 @@ export type PatientSumAggregate = {
   userProfileId?: Maybe<Scalars["Float"]["output"]>;
 };
 
+export type PatientTransactionsAggregateGroupBy = {
+  __typename?: "PatientTransactionsAggregateGroupBy";
+  amount?: Maybe<Scalars["Float"]["output"]>;
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  currency?: Maybe<Scalars["String"]["output"]>;
+  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  externalId?: Maybe<Scalars["String"]["output"]>;
+  id?: Maybe<Scalars["ID"]["output"]>;
+  patientId?: Maybe<Scalars["Float"]["output"]>;
+  provider?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+export type PatientTransactionsAggregateResponse = {
+  __typename?: "PatientTransactionsAggregateResponse";
+  avg?: Maybe<PatientTransactionsAvgAggregate>;
+  count?: Maybe<PatientTransactionsCountAggregate>;
+  groupBy?: Maybe<PatientTransactionsAggregateGroupBy>;
+  max?: Maybe<PatientTransactionsMaxAggregate>;
+  min?: Maybe<PatientTransactionsMinAggregate>;
+  sum?: Maybe<PatientTransactionsSumAggregate>;
+};
+
+export type PatientTransactionsAvgAggregate = {
+  __typename?: "PatientTransactionsAvgAggregate";
+  amount?: Maybe<Scalars["Float"]["output"]>;
+  id?: Maybe<Scalars["Float"]["output"]>;
+  patientId?: Maybe<Scalars["Float"]["output"]>;
+};
+
+export type PatientTransactionsConnection = {
+  __typename?: "PatientTransactionsConnection";
+  /** Array of nodes. */
+  nodes: Array<Transaction>;
+  /** Paging information */
+  pageInfo: OffsetPageInfo;
+  /** Fetch total count of records */
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type PatientTransactionsCountAggregate = {
+  __typename?: "PatientTransactionsCountAggregate";
+  amount?: Maybe<Scalars["Int"]["output"]>;
+  createdAt?: Maybe<Scalars["Int"]["output"]>;
+  currency?: Maybe<Scalars["Int"]["output"]>;
+  deletedAt?: Maybe<Scalars["Int"]["output"]>;
+  externalId?: Maybe<Scalars["Int"]["output"]>;
+  id?: Maybe<Scalars["Int"]["output"]>;
+  patientId?: Maybe<Scalars["Int"]["output"]>;
+  provider?: Maybe<Scalars["Int"]["output"]>;
+  transactionId?: Maybe<Scalars["Int"]["output"]>;
+  updatedAt?: Maybe<Scalars["Int"]["output"]>;
+};
+
+export type PatientTransactionsMaxAggregate = {
+  __typename?: "PatientTransactionsMaxAggregate";
+  amount?: Maybe<Scalars["Float"]["output"]>;
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  currency?: Maybe<Scalars["String"]["output"]>;
+  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  externalId?: Maybe<Scalars["String"]["output"]>;
+  id?: Maybe<Scalars["ID"]["output"]>;
+  patientId?: Maybe<Scalars["Float"]["output"]>;
+  provider?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+export type PatientTransactionsMinAggregate = {
+  __typename?: "PatientTransactionsMinAggregate";
+  amount?: Maybe<Scalars["Float"]["output"]>;
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  currency?: Maybe<Scalars["String"]["output"]>;
+  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  externalId?: Maybe<Scalars["String"]["output"]>;
+  id?: Maybe<Scalars["ID"]["output"]>;
+  patientId?: Maybe<Scalars["Float"]["output"]>;
+  provider?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+export type PatientTransactionsSumAggregate = {
+  __typename?: "PatientTransactionsSumAggregate";
+  amount?: Maybe<Scalars["Float"]["output"]>;
+  id?: Maybe<Scalars["Float"]["output"]>;
+  patientId?: Maybe<Scalars["Float"]["output"]>;
+};
+
+export type PayAppointmentDto = {
+  appointmentId: Scalars["Float"]["input"];
+  phone: Scalars["String"]["input"];
+  provider: Scalars["String"]["input"];
+};
+
 export type Query = {
   __typename?: "Query";
   appointment: Appointment;
@@ -3439,7 +2650,6 @@ export type Query = {
   departmentAggregate: Array<DepartmentAggregateResponse>;
   departments: DepartmentConnection;
   doctor: Doctor;
-  doctorAggregate: Array<DoctorAggregateResponse>;
   doctorType: DoctorType;
   doctorTypeCategories: DoctorTypeCategoryConnection;
   doctorTypeCategory: DoctorTypeCategory;
@@ -3448,13 +2658,15 @@ export type Query = {
   /** Get User Profile for currently logged in user */
   getCurrentUserProfile: UserProfile;
   healthProvider: HealthProvider;
-  healthProviderAggregate: Array<HealthProviderAggregateResponse>;
   healthProviders: HealthProviderConnection;
   patient: Patient;
   patientAggregate: Array<PatientAggregateResponse>;
   patients: PatientConnection;
   schedule: Schedule;
   schedules: ScheduleConnection;
+  transaction: Transaction;
+  transactionAggregate: Array<TransactionAggregateResponse>;
+  transactions: TransactionConnection;
   userProfile: UserProfile;
   userProfileAggregate: Array<UserProfileAggregateResponse>;
   userProfiles: UserProfileConnection;
@@ -3492,10 +2704,6 @@ export type QueryDoctorArgs = {
   id: Scalars["ID"]["input"];
 };
 
-export type QueryDoctorAggregateArgs = {
-  filter?: InputMaybe<DoctorAggregateFilter>;
-};
-
 export type QueryDoctorTypeArgs = {
   id: Scalars["ID"]["input"];
 };
@@ -3523,10 +2731,6 @@ export type QueryDoctorsArgs = {
 
 export type QueryHealthProviderArgs = {
   id: Scalars["ID"]["input"];
-};
-
-export type QueryHealthProviderAggregateArgs = {
-  filter?: InputMaybe<HealthProviderAggregateFilter>;
 };
 
 export type QueryHealthProvidersArgs = {
@@ -3559,6 +2763,20 @@ export type QuerySchedulesArgs = {
   sorting?: Array<ScheduleSort>;
 };
 
+export type QueryTransactionArgs = {
+  id: Scalars["ID"]["input"];
+};
+
+export type QueryTransactionAggregateArgs = {
+  filter?: InputMaybe<TransactionAggregateFilter>;
+};
+
+export type QueryTransactionsArgs = {
+  filter?: TransactionFilter;
+  paging?: CursorPaging;
+  sorting?: Array<TransactionSort>;
+};
+
 export type QueryUserProfileArgs = {
   id: Scalars["ID"]["input"];
 };
@@ -3587,21 +2805,9 @@ export type Schedule = {
   doctorId?: Maybe<Scalars["Float"]["output"]>;
   endTime: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
+  isFull?: Maybe<Scalars["Boolean"]["output"]>;
   startTime: Scalars["String"]["output"];
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type ScheduleAggregateFilter = {
-  and?: InputMaybe<Array<ScheduleAggregateFilter>>;
-  createdAt?: InputMaybe<DateFieldComparison>;
-  dayOfWeek?: InputMaybe<DaysOfWeekFilterComparison>;
-  deletedAt?: InputMaybe<DateFieldComparison>;
-  doctorId?: InputMaybe<NumberFieldComparison>;
-  endTime?: InputMaybe<StringFieldComparison>;
-  id?: InputMaybe<IdFilterComparison>;
-  or?: InputMaybe<Array<ScheduleAggregateFilter>>;
-  startTime?: InputMaybe<StringFieldComparison>;
-  updatedAt?: InputMaybe<DateFieldComparison>;
 };
 
 export type ScheduleConnection = {
@@ -3620,6 +2826,7 @@ export type ScheduleDeleteFilter = {
   doctorId?: InputMaybe<NumberFieldComparison>;
   endTime?: InputMaybe<StringFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
+  isFull?: InputMaybe<BooleanFieldComparison>;
   or?: InputMaybe<Array<ScheduleDeleteFilter>>;
   startTime?: InputMaybe<StringFieldComparison>;
   updatedAt?: InputMaybe<DateFieldComparison>;
@@ -3633,6 +2840,7 @@ export type ScheduleDeleteResponse = {
   doctorId?: Maybe<Scalars["Float"]["output"]>;
   endTime?: Maybe<Scalars["String"]["output"]>;
   id?: Maybe<Scalars["ID"]["output"]>;
+  isFull?: Maybe<Scalars["Boolean"]["output"]>;
   startTime?: Maybe<Scalars["String"]["output"]>;
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
 };
@@ -3654,6 +2862,7 @@ export type ScheduleFilter = {
   doctorId?: InputMaybe<NumberFieldComparison>;
   endTime?: InputMaybe<StringFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
+  isFull?: InputMaybe<BooleanFieldComparison>;
   or?: InputMaybe<Array<ScheduleFilter>>;
   startTime?: InputMaybe<StringFieldComparison>;
   updatedAt?: InputMaybe<DateFieldComparison>;
@@ -3690,6 +2899,7 @@ export enum ScheduleSortFields {
   DoctorId = "doctorId",
   EndTime = "endTime",
   Id = "id",
+  IsFull = "isFull",
   StartTime = "startTime",
   UpdatedAt = "updatedAt",
 }
@@ -3700,12 +2910,24 @@ export type SetDoctorDto = {
   userId: Scalars["Int"]["input"];
 };
 
+export type SetDoctorToAppointmentDto = {
+  appointmentId: Scalars["Float"]["input"];
+  doctorId: Scalars["Float"]["input"];
+  scheduleTime: Scalars["String"]["input"];
+};
+
 export type SetDoctorTypeDto = {
   bio?: InputMaybe<Scalars["String"]["input"]>;
   doctorTypeCategoryId?: InputMaybe<Scalars["Float"]["input"]>;
   doctorTypeId?: InputMaybe<Scalars["Float"]["input"]>;
   location?: InputMaybe<Scalars["String"]["input"]>;
   price?: InputMaybe<Scalars["Float"]["input"]>;
+};
+
+export type SetProviderDepartmentDto = {
+  departmentId: Scalars["Float"]["input"];
+  providerId: Scalars["Float"]["input"];
+  type?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 /** Sort Directions */
@@ -3735,6 +2957,276 @@ export type StringFieldComparison = {
   notILike?: InputMaybe<Scalars["String"]["input"]>;
   notIn?: InputMaybe<Array<Scalars["String"]["input"]>>;
   notLike?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type Subscription = {
+  __typename?: "Subscription";
+  createdTransaction: Transaction;
+  deletedManyTransactions: DeleteManyResponse;
+  deletedOneTransaction: TransactionDeleteResponse;
+  updatedManyTransactions: UpdateManyResponse;
+  updatedOneTransaction: Transaction;
+};
+
+export type SubscriptionCreatedTransactionArgs = {
+  input?: InputMaybe<CreateTransactionSubscriptionFilterInput>;
+};
+
+export type SubscriptionDeletedOneTransactionArgs = {
+  input?: InputMaybe<DeleteOneTransactionSubscriptionFilterInput>;
+};
+
+export type SubscriptionUpdatedOneTransactionArgs = {
+  input?: InputMaybe<UpdateOneTransactionSubscriptionFilterInput>;
+};
+
+export type TimeSlot = {
+  endTime?: InputMaybe<Scalars["String"]["input"]>;
+  startTime?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type Transaction = {
+  __typename?: "Transaction";
+  amount?: Maybe<Scalars["Float"]["output"]>;
+  appointment?: Maybe<Appointment>;
+  appointmentId?: Maybe<Scalars["Float"]["output"]>;
+  createdAt: Scalars["DateTime"]["output"];
+  currency?: Maybe<Scalars["String"]["output"]>;
+  deletedAt: Scalars["DateTime"]["output"];
+  externalId?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  patient?: Maybe<Patient>;
+  patientId: Scalars["Float"]["output"];
+  provider?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
+  updatedAt: Scalars["DateTime"]["output"];
+};
+
+export type TransactionAggregateFilter = {
+  amount?: InputMaybe<NumberFieldComparison>;
+  and?: InputMaybe<Array<TransactionAggregateFilter>>;
+  createdAt?: InputMaybe<DateFieldComparison>;
+  currency?: InputMaybe<StringFieldComparison>;
+  deletedAt?: InputMaybe<DateFieldComparison>;
+  externalId?: InputMaybe<StringFieldComparison>;
+  id?: InputMaybe<IdFilterComparison>;
+  or?: InputMaybe<Array<TransactionAggregateFilter>>;
+  patientId?: InputMaybe<NumberFieldComparison>;
+  provider?: InputMaybe<StringFieldComparison>;
+  transactionId?: InputMaybe<StringFieldComparison>;
+  updatedAt?: InputMaybe<DateFieldComparison>;
+};
+
+export type TransactionAggregateGroupBy = {
+  __typename?: "TransactionAggregateGroupBy";
+  amount?: Maybe<Scalars["Float"]["output"]>;
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  currency?: Maybe<Scalars["String"]["output"]>;
+  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  externalId?: Maybe<Scalars["String"]["output"]>;
+  id?: Maybe<Scalars["ID"]["output"]>;
+  patientId?: Maybe<Scalars["Float"]["output"]>;
+  provider?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+export type TransactionAggregateGroupByCreatedAtArgs = {
+  by?: GroupBy;
+};
+
+export type TransactionAggregateGroupByDeletedAtArgs = {
+  by?: GroupBy;
+};
+
+export type TransactionAggregateGroupByUpdatedAtArgs = {
+  by?: GroupBy;
+};
+
+export type TransactionAggregateResponse = {
+  __typename?: "TransactionAggregateResponse";
+  avg?: Maybe<TransactionAvgAggregate>;
+  count?: Maybe<TransactionCountAggregate>;
+  groupBy?: Maybe<TransactionAggregateGroupBy>;
+  max?: Maybe<TransactionMaxAggregate>;
+  min?: Maybe<TransactionMinAggregate>;
+  sum?: Maybe<TransactionSumAggregate>;
+};
+
+export type TransactionAvgAggregate = {
+  __typename?: "TransactionAvgAggregate";
+  amount?: Maybe<Scalars["Float"]["output"]>;
+  id?: Maybe<Scalars["Float"]["output"]>;
+  patientId?: Maybe<Scalars["Float"]["output"]>;
+};
+
+export type TransactionConnection = {
+  __typename?: "TransactionConnection";
+  /** Array of edges. */
+  edges: Array<TransactionEdge>;
+  /** Paging information */
+  pageInfo: PageInfo;
+  /** Fetch total count of records */
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type TransactionCountAggregate = {
+  __typename?: "TransactionCountAggregate";
+  amount?: Maybe<Scalars["Int"]["output"]>;
+  createdAt?: Maybe<Scalars["Int"]["output"]>;
+  currency?: Maybe<Scalars["Int"]["output"]>;
+  deletedAt?: Maybe<Scalars["Int"]["output"]>;
+  externalId?: Maybe<Scalars["Int"]["output"]>;
+  id?: Maybe<Scalars["Int"]["output"]>;
+  patientId?: Maybe<Scalars["Int"]["output"]>;
+  provider?: Maybe<Scalars["Int"]["output"]>;
+  transactionId?: Maybe<Scalars["Int"]["output"]>;
+  updatedAt?: Maybe<Scalars["Int"]["output"]>;
+};
+
+export type TransactionDeleteResponse = {
+  __typename?: "TransactionDeleteResponse";
+  amount?: Maybe<Scalars["Float"]["output"]>;
+  appointmentId?: Maybe<Scalars["Float"]["output"]>;
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  currency?: Maybe<Scalars["String"]["output"]>;
+  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  externalId?: Maybe<Scalars["String"]["output"]>;
+  id?: Maybe<Scalars["ID"]["output"]>;
+  patientId?: Maybe<Scalars["Float"]["output"]>;
+  provider?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+export type TransactionEdge = {
+  __typename?: "TransactionEdge";
+  /** Cursor for this node. */
+  cursor: Scalars["ConnectionCursor"]["output"];
+  /** The node containing the Transaction */
+  node: Transaction;
+};
+
+export type TransactionFilter = {
+  amount?: InputMaybe<NumberFieldComparison>;
+  and?: InputMaybe<Array<TransactionFilter>>;
+  appointment?: InputMaybe<TransactionFilterAppointmentFilter>;
+  createdAt?: InputMaybe<DateFieldComparison>;
+  currency?: InputMaybe<StringFieldComparison>;
+  deletedAt?: InputMaybe<DateFieldComparison>;
+  externalId?: InputMaybe<StringFieldComparison>;
+  id?: InputMaybe<IdFilterComparison>;
+  or?: InputMaybe<Array<TransactionFilter>>;
+  patient?: InputMaybe<TransactionFilterPatientFilter>;
+  patientId?: InputMaybe<NumberFieldComparison>;
+  provider?: InputMaybe<StringFieldComparison>;
+  transactionId?: InputMaybe<StringFieldComparison>;
+  updatedAt?: InputMaybe<DateFieldComparison>;
+};
+
+export type TransactionFilterAppointmentFilter = {
+  and?: InputMaybe<Array<TransactionFilterAppointmentFilter>>;
+  appointmentType?: InputMaybe<StringFieldComparison>;
+  createdAt?: InputMaybe<DateFieldComparison>;
+  deletedAt?: InputMaybe<DateFieldComparison>;
+  departmentId?: InputMaybe<NumberFieldComparison>;
+  doctorId?: InputMaybe<NumberFieldComparison>;
+  healthProviderId?: InputMaybe<NumberFieldComparison>;
+  id?: InputMaybe<IdFilterComparison>;
+  isActive?: InputMaybe<BooleanFieldComparison>;
+  or?: InputMaybe<Array<TransactionFilterAppointmentFilter>>;
+  patientId?: InputMaybe<NumberFieldComparison>;
+  price?: InputMaybe<NumberFieldComparison>;
+  scheduleTime?: InputMaybe<DateFieldComparison>;
+  status?: InputMaybe<StringFieldComparison>;
+  transactionId?: InputMaybe<StringFieldComparison>;
+  updatedAt?: InputMaybe<DateFieldComparison>;
+};
+
+export type TransactionFilterPatientFilter = {
+  and?: InputMaybe<Array<TransactionFilterPatientFilter>>;
+  createdAt?: InputMaybe<DateFieldComparison>;
+  deletedAt?: InputMaybe<DateFieldComparison>;
+  id?: InputMaybe<IdFilterComparison>;
+  or?: InputMaybe<Array<TransactionFilterPatientFilter>>;
+  updatedAt?: InputMaybe<DateFieldComparison>;
+  userProfileId?: InputMaybe<NumberFieldComparison>;
+};
+
+export type TransactionMaxAggregate = {
+  __typename?: "TransactionMaxAggregate";
+  amount?: Maybe<Scalars["Float"]["output"]>;
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  currency?: Maybe<Scalars["String"]["output"]>;
+  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  externalId?: Maybe<Scalars["String"]["output"]>;
+  id?: Maybe<Scalars["ID"]["output"]>;
+  patientId?: Maybe<Scalars["Float"]["output"]>;
+  provider?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+export type TransactionMinAggregate = {
+  __typename?: "TransactionMinAggregate";
+  amount?: Maybe<Scalars["Float"]["output"]>;
+  createdAt?: Maybe<Scalars["DateTime"]["output"]>;
+  currency?: Maybe<Scalars["String"]["output"]>;
+  deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  externalId?: Maybe<Scalars["String"]["output"]>;
+  id?: Maybe<Scalars["ID"]["output"]>;
+  patientId?: Maybe<Scalars["Float"]["output"]>;
+  provider?: Maybe<Scalars["String"]["output"]>;
+  transactionId?: Maybe<Scalars["String"]["output"]>;
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+export type TransactionPaymentResult = {
+  __typename?: "TransactionPaymentResult";
+  message: Scalars["String"]["output"];
+  success: Scalars["Boolean"]["output"];
+  transaction?: Maybe<Transaction>;
+};
+
+export type TransactionSort = {
+  direction: SortDirection;
+  field: TransactionSortFields;
+  nulls?: InputMaybe<SortNulls>;
+};
+
+export enum TransactionSortFields {
+  Amount = "amount",
+  CreatedAt = "createdAt",
+  Currency = "currency",
+  DeletedAt = "deletedAt",
+  ExternalId = "externalId",
+  Id = "id",
+  PatientId = "patientId",
+  Provider = "provider",
+  TransactionId = "transactionId",
+  UpdatedAt = "updatedAt",
+}
+
+export type TransactionSubscriptionFilter = {
+  amount?: InputMaybe<NumberFieldComparison>;
+  and?: InputMaybe<Array<TransactionSubscriptionFilter>>;
+  createdAt?: InputMaybe<DateFieldComparison>;
+  currency?: InputMaybe<StringFieldComparison>;
+  deletedAt?: InputMaybe<DateFieldComparison>;
+  externalId?: InputMaybe<StringFieldComparison>;
+  id?: InputMaybe<IdFilterComparison>;
+  or?: InputMaybe<Array<TransactionSubscriptionFilter>>;
+  patientId?: InputMaybe<NumberFieldComparison>;
+  provider?: InputMaybe<StringFieldComparison>;
+  transactionId?: InputMaybe<StringFieldComparison>;
+  updatedAt?: InputMaybe<DateFieldComparison>;
+};
+
+export type TransactionSumAggregate = {
+  __typename?: "TransactionSumAggregate";
+  amount?: Maybe<Scalars["Float"]["output"]>;
+  id?: Maybe<Scalars["Float"]["output"]>;
+  patientId?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type UpdateDepartmentDto = {
@@ -3822,6 +3314,11 @@ export type UpdateOneHealthProviderInput = {
   id: Scalars["ID"]["input"];
   /** The update to apply. */
   update: UpdateHealthProviderDto;
+};
+
+export type UpdateOneTransactionSubscriptionFilterInput = {
+  /** Specify to filter the records returned. */
+  filter: TransactionSubscriptionFilter;
 };
 
 export type Upload = {
@@ -4126,11 +3623,11 @@ export type ProvidersMutation = {
     name?: string | null;
     region?: string | null;
     type?: string | null;
-    updatedAt: any;
+    updatedAt?: any | null;
     district?: string | null;
     description?: string | null;
-    deletedAt: any;
-    createdAt: any;
+    deletedAt?: any | null;
+    createdAt?: any | null;
   };
 };
 
@@ -4176,6 +3673,20 @@ export type LoginMutation = {
     accessToken: string;
     expiresIn: number;
     passwordResetRequired: boolean;
+  };
+};
+
+export type SetUserAsDoctorMutationVariables = Exact<{
+  input: SetDoctorDto;
+}>;
+
+export type SetUserAsDoctorMutation = {
+  __typename?: "Mutation";
+  setDoctor: {
+    __typename?: "Doctor";
+    id: string;
+    bio?: string | null;
+    createdAt?: any | null;
   };
 };
 
@@ -4250,36 +3761,50 @@ export type DepartmentsQuery = {
   };
 };
 
-export type DoctorsQueryVariables = Exact<{
-  filter: DoctorFilter;
-}>;
+export type DoctorsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type DoctorsQuery = {
   __typename?: "Query";
   doctors: Array<{
     __typename?: "Doctor";
-    bio?: string | null;
-    price?: number | null;
-    ratings?: number | null;
     id: string;
-    location?: string | null;
-    updatedAt: any;
-    availabilities?: Array<{
-      __typename?: "Schedule";
-      createdAt?: any | null;
-      dayOfWeek: DaysOfWeek;
-      deletedAt?: any | null;
-      doctorId?: number | null;
-      endTime: string;
+    bio?: string | null;
+    departmentId: number;
+    updatedAt?: any | null;
+    createdAt?: any | null;
+    userProfile?: {
+      __typename?: "UserProfile";
       id: string;
-      startTime: string;
-      updatedAt?: any | null;
-    }> | null;
-    doctorType?: {
-      __typename?: "DoctorType";
+      firstName?: string | null;
+      email?: string | null;
+      lastName?: string | null;
+      middleName?: string | null;
+      phoneNumber?: string | null;
+      dateOfBirth?: any | null;
+      username?: string | null;
+      updatedAt: any;
+      createdAt: any;
+      gender?: string | null;
+    } | null;
+    department?: {
+      __typename?: "Department";
       id: string;
       name?: string | null;
       code?: string | null;
+      doctorsAggregate: Array<{
+        __typename?: "DepartmentDoctorsAggregateResponse";
+        avg?: {
+          __typename?: "DepartmentDoctorsAvgAggregate";
+          id?: number | null;
+        } | null;
+      }>;
+      healthProvidersAggregate: Array<{
+        __typename?: "DepartmentHealthProvidersAggregateResponse";
+        avg?: {
+          __typename?: "DepartmentHealthProvidersAvgAggregate";
+          id?: number | null;
+        } | null;
+      }>;
     } | null;
   }>;
 };
@@ -4348,7 +3873,7 @@ export type HealthProvidersQuery = {
               ratings?: number | null;
               id: string;
               location?: string | null;
-              updatedAt: any;
+              updatedAt?: any | null;
               availabilities?: Array<{
                 __typename?: "Schedule";
                 createdAt?: any | null;
@@ -4377,6 +3902,43 @@ export type HealthProvidersQuery = {
       hasNextPage?: boolean | null;
       hasPreviousPage?: boolean | null;
       startCursor?: any | null;
+    };
+  };
+};
+
+export type UserProfilesQueryVariables = Exact<{
+  filter: UserProfileFilter;
+  paging: CursorPaging;
+}>;
+
+export type UserProfilesQuery = {
+  __typename?: "Query";
+  userProfiles: {
+    __typename?: "UserProfileConnection";
+    totalCount: number;
+    edges: Array<{
+      __typename?: "UserProfileEdge";
+      node: {
+        __typename?: "UserProfile";
+        gender?: string | null;
+        id: string;
+        lastName?: string | null;
+        role?: string | null;
+        phoneNumber?: string | null;
+        email?: string | null;
+        firstName?: string | null;
+        middleName?: string | null;
+        username?: string | null;
+        dateOfBirth?: any | null;
+        active?: boolean | null;
+      };
+    }>;
+    pageInfo: {
+      __typename?: "PageInfo";
+      hasNextPage?: boolean | null;
+      hasPreviousPage?: boolean | null;
+      startCursor?: any | null;
+      endCursor?: any | null;
     };
   };
 };
@@ -4523,6 +4085,44 @@ export const useLoginMutation = <TError = unknown, TContext = unknown>(
       )(),
     options
   );
+export const SetUserAsDoctorDocument = `
+    mutation SetUserAsDoctor($input: SetDoctorDto!) {
+  setDoctor(input: $input) {
+    id
+    bio
+    createdAt
+  }
+}
+    `;
+export const useSetUserAsDoctorMutation = <
+  TError = unknown,
+  TContext = unknown
+>(
+  client: GraphQLClient,
+  options?: UseMutationOptions<
+    SetUserAsDoctorMutation,
+    TError,
+    SetUserAsDoctorMutationVariables,
+    TContext
+  >,
+  headers?: RequestInit["headers"]
+) =>
+  useMutation<
+    SetUserAsDoctorMutation,
+    TError,
+    SetUserAsDoctorMutationVariables,
+    TContext
+  >(
+    ["SetUserAsDoctor"],
+    (variables?: SetUserAsDoctorMutationVariables) =>
+      fetcher<SetUserAsDoctorMutation, SetUserAsDoctorMutationVariables>(
+        client,
+        SetUserAsDoctorDocument,
+        variables,
+        headers
+      )(),
+    options
+  );
 export const UpdateOneHealthProviderDocument = `
     mutation UpdateOneHealthProvider($input: UpdateOneHealthProviderInput!) {
   updateOneHealthProvider(input: $input) {
@@ -4621,40 +4221,52 @@ export const useDepartmentsQuery = <TData = DepartmentsQuery, TError = unknown>(
     options
   );
 export const DoctorsDocument = `
-    query Doctors($filter: DoctorFilter!) {
-  doctors(filter: $filter) {
+    query Doctors {
+  doctors {
+    id
     bio
-    availabilities {
-      createdAt
-      dayOfWeek
-      deletedAt
-      doctorId
-      endTime
+    userProfile {
       id
-      startTime
+      firstName
+      email
+      lastName
+      middleName
+      phoneNumber
+      dateOfBirth
+      username
       updatedAt
+      createdAt
+      gender
     }
-    doctorType {
+    department {
       id
       name
       code
+      doctorsAggregate {
+        avg {
+          id
+        }
+      }
+      healthProvidersAggregate {
+        avg {
+          id
+        }
+      }
     }
-    price
-    ratings
-    id
-    location
+    departmentId
     updatedAt
+    createdAt
   }
 }
     `;
 export const useDoctorsQuery = <TData = DoctorsQuery, TError = unknown>(
   client: GraphQLClient,
-  variables: DoctorsQueryVariables,
+  variables?: DoctorsQueryVariables,
   options?: UseQueryOptions<DoctorsQuery, TError, TData>,
   headers?: RequestInit["headers"]
 ) =>
   useQuery<DoctorsQuery, TError, TData>(
-    ["Doctors", variables],
+    variables === undefined ? ["Doctors"] : ["Doctors", variables],
     fetcher<DoctorsQuery, DoctorsQueryVariables>(
       client,
       DoctorsDocument,
@@ -4756,6 +4368,53 @@ export const useHealthProvidersQuery = <
     fetcher<HealthProvidersQuery, HealthProvidersQueryVariables>(
       client,
       HealthProvidersDocument,
+      variables,
+      headers
+    ),
+    options
+  );
+export const UserProfilesDocument = `
+    query UserProfiles($filter: UserProfileFilter!, $paging: CursorPaging!) {
+  userProfiles(filter: $filter, paging: $paging) {
+    edges {
+      node {
+        gender
+        id
+        lastName
+        role
+        phoneNumber
+        email
+        firstName
+        middleName
+        username
+        dateOfBirth
+        active
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    totalCount
+  }
+}
+    `;
+export const useUserProfilesQuery = <
+  TData = UserProfilesQuery,
+  TError = unknown
+>(
+  client: GraphQLClient,
+  variables: UserProfilesQueryVariables,
+  options?: UseQueryOptions<UserProfilesQuery, TError, TData>,
+  headers?: RequestInit["headers"]
+) =>
+  useQuery<UserProfilesQuery, TError, TData>(
+    ["UserProfiles", variables],
+    fetcher<UserProfilesQuery, UserProfilesQueryVariables>(
+      client,
+      UserProfilesDocument,
       variables,
       headers
     ),

@@ -1,0 +1,7 @@
+mutation SetUserAsDoctor($input: SetDoctorDto!) {
+  setDoctor(input: $input) {
+    id
+    bio
+    createdAt
+  }
+}

@@ -80,9 +80,19 @@ const CreateProvidersDrawer = (props: ICreateHospitalDrawerProps) => {
         {
           name: "type",
           label: "Type",
-          placeholder: "Type",
           colSpan: 1,
-          type: "text",
+          placeholder: "Type",
+          options: [
+            { value: "HOSPITALS", key: "HOSPITALS" },
+            { value: "POLYCLINICS", key: "POLYCLINICS" },
+            { value: "HEALTH CENTER", key: "HEALTH_CENTER" },
+            {
+              value: "SPECIALIZED POLYCLINICS",
+              key: "SPECIALIZED_POLYCLINICS",
+            },
+            { value: "OTHERS", key: "OTHERS" },
+          ],
+          type: "select",
         },
       ],
     },

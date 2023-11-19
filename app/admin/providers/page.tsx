@@ -26,7 +26,6 @@ import { IPaginationProps } from "@/components/Table/tableFooter";
 import { getPageSize } from "@/utils/helpers";
 import CreateProvidersDrawer from "./components/CreateProvidersDrawer";
 import UpdateProviderDrawer from "./components/UpdateProviderDrawer";
-import { usePromptDialog } from "@/components/Prompt/PromptService";
 import useDialog from "@/hooks/useDialog";
 import AlertDialog from "@/components/Dialog";
 const page = () => {

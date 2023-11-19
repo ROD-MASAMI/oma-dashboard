@@ -1,25 +1,61 @@
-query Doctors($filter: DoctorFilter!) {
-  doctors(filter: $filter) {
+query Doctors {
+  doctors {
+    id
     bio
-    availabilities {
-      createdAt
-      dayOfWeek
-      deletedAt
-      doctorId
-      endTime
+    userProfile {
       id
-      startTime
+      firstName
+      email
+      lastName
+      middleName
+      phoneNumber
+      dateOfBirth
+      username
       updatedAt
+      createdAt
+      gender
     }
-    doctorType {
+    # healthProviders {
+    #   pageInfo {
+    #     hasNextPage
+    #     hasPreviousPage
+    #   }
+    #   totalCount
+
+    #   nodes {
+    #     id
+    #     name
+    #     region
+    #   }
+    # }
+    department {
       id
       name
       code
+      doctorsAggregate {
+        avg {
+          id
+        }
+      }
+      healthProvidersAggregate {
+        avg {
+          id
+        }
+      }
     }
-    price
-    ratings
-    id
-    location
+    # availabilitiesAggregate {
+    #   avg {
+    #     id
+    #   }
+    # }
+    departmentId
+    # uploadId
     updatedAt
+    createdAt
+    # healthProvidersAggregate {
+    #   avg {
+    #     id
+    #   }
+    # }
   }
 }
