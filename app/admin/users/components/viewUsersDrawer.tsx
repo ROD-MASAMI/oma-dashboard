@@ -116,7 +116,7 @@ export default function UserDetailsDrawer(props: IUserDetailsDrawerProps) {
       >
         <>
           <FormControl display="flex" alignItems="center">
-            <FormLabel htmlFor="email-alerts" mb="0">
+            <FormLabel className=" text-black" htmlFor="email-alerts" mb="0">
               Assign as doctor?
             </FormLabel>
             <Switch
@@ -128,7 +128,7 @@ export default function UserDetailsDrawer(props: IUserDetailsDrawerProps) {
           {Doctor && (
             <div className=" flex flex-col gap-5 mt-5">
               <>
-                <p> Choose Health Provider</p>
+                <p className=" text-black"> Choose Health Provider</p>
                 <Select
                   value={healthProvider}
                   onChange={(e) => setHealthProvider(e.target.value)}
@@ -145,7 +145,7 @@ export default function UserDetailsDrawer(props: IUserDetailsDrawerProps) {
               </>
               {selectedProvider && (
                 <>
-                  <p>Choose Department</p>
+                  <p className=" text-black">Choose Department</p>
                   <Select
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}

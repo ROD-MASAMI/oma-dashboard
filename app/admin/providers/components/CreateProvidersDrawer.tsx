@@ -1,15 +1,21 @@
-import { JFieldGroup } from "@/components/JForm";
+import { JFieldGroup, JFieldOption } from "@/components/JForm";
 import JFormDrawer from "@/components/JForm/JFormDrawer";
 import {
+  AssignDepartmentToProviderMutation,
+  AssignDepartmentToProviderMutationVariables,
   CursorPaging,
+  Department,
+  DepartmentsQuery,
   ProvidersMutation,
   ProvidersMutationVariables,
+  useAssignDepartmentToProviderMutation,
+  useDepartmentsQuery,
   useProvidersMutation,
 } from "@/graphql/generated/graphql";
 import { graphqlRequestClient } from "@/utils/api/graphqlRequestClient";
 import { GQLErrors } from "@/utils/types/error";
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { object, string } from "yup";
 export interface ICreateHospitalDrawerProps {
   isOpen: boolean;
@@ -17,10 +23,57 @@ export interface ICreateHospitalDrawerProps {
   btnRef?: React.RefObject<any>;
   onCreated: (values: any) => void;
 }
+
+type payload = {
+  description: string;
+  district: string;
+  name: string;
+  region: string;
+  type: string;
+  department: string;
+};
 const CreateProvidersDrawer = (props: ICreateHospitalDrawerProps) => {
   const [cursorPaging, setCursorPaging] = useState<CursorPaging>({ first: 10 });
+  const [departmentId, setDepartmentId] = useState<String>("");
+  const [options, setOptions] = useState<JFieldOption[]>([]);
   const { isOpen, onClose, btnRef, onCreated } = props;
   const Client = useQueryClient();
+  const {
+    data,
+    isError,
+    isLoading: departmentLoading,
+  } = useDepartmentsQuery<DepartmentsQuery, GQLErrors>(graphqlRequestClient, {
+    filter: {},
+    paging: cursorPaging,
+  });
+
+  useEffect(() => {
+    const _departments: Department[] = data
+      ? data.departments.edges.map((d) => d.node as Department)
+      : [];
+    setOptions(
+      _departments.map((item) => {
+        return {
+          key: item.id,
+          value: item.name,
+        };
+      })
+    );
+  }, [data]);
+  const { isLoading: isPending, mutate: AssignDepartment } =
+    useAssignDepartmentToProviderMutation<GQLErrors>(graphqlRequestClient, {
+      onSuccess: (
+        data: AssignDepartmentToProviderMutation,
+        _variables: AssignDepartmentToProviderMutationVariables,
+        _context: unknown
+      ) => {
+        Client.invalidateQueries({
+          queryKey: ["Providers", { filter: {}, paging: cursorPaging }],
+        });
+        onCreated(data);
+        onClose();
+      },
+    });
 
   const { isLoading, mutate } = useProvidersMutation<GQLErrors>(
     graphqlRequestClient,
@@ -30,11 +83,12 @@ const CreateProvidersDrawer = (props: ICreateHospitalDrawerProps) => {
         _variables: ProvidersMutationVariables,
         _context: unknown
       ) => {
-        Client.invalidateQueries({
-          queryKey: ["Providers", { filter: {}, paging: cursorPaging }],
+        AssignDepartment({
+          input: {
+            departmentIds: [Number(departmentId)],
+            providerId: Number(data.createOneHealthProvider.id),
+          },
         });
-        onCreated(data);
-        onClose();
       },
     }
   );
@@ -94,9 +148,25 @@ const CreateProvidersDrawer = (props: ICreateHospitalDrawerProps) => {
           ],
           type: "select",
         },
+        {
+          name: "department",
+          label: "Department",
+          colSpan: 1,
+          placeholder: "Department",
+          options: options,
+          type: "select",
+        },
       ],
     },
   ];
+
+  const onSubmit = (value: payload) => {
+    const { department, ...data } = value;
+    const data2 = { data };
+    setDepartmentId(department);
+    mutate({ input: { healthProvider: data } });
+  };
+
   const schema = object().shape({
     description: string().required("Please enter description"),
     name: string().required("Please enter Hospital name"),
@@ -113,7 +183,7 @@ const CreateProvidersDrawer = (props: ICreateHospitalDrawerProps) => {
       onClose={onClose}
       schema={schema}
       submitText="Save"
-      onSubmit={(value) => mutate({ input: { healthProvider: value } })}
+      onSubmit={(value: payload) => onSubmit(value)}
       initialValues={values}
       fieldGroups={fields}
     />

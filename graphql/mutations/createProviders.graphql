@@ -11,3 +11,12 @@ mutation Providers($input: CreateOneHealthProviderInput!) {
     createdAt
   }
 }
+mutation AssignDepartmentToProvider($input: AssignDepartmentToProviderDto!) {
+  assignDepartmentToProvider(input: $input) {
+    id
+    name
+    region
+    type
+    district
+  }
+}

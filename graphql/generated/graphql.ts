@@ -35,7 +35,7 @@ function fetcher<TData, TVariables extends { [key: string]: any }>(
 ) {
   return async (): Promise<TData> =>
     client.request({
-      //@ts-ignore
+      // @ts-ignore
       query,
       variables,
       requestHeaders,
@@ -57,16 +57,19 @@ export type Appointment = {
   appointmentType?: Maybe<Scalars["String"]["output"]>;
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  department?: Maybe<Department>;
   departmentId?: Maybe<Scalars["Float"]["output"]>;
-  doctor: Doctor;
+  doctor?: Maybe<Doctor>;
   doctorId?: Maybe<Scalars["Float"]["output"]>;
+  healthProvider?: Maybe<HealthProvider>;
   healthProviderId?: Maybe<Scalars["Float"]["output"]>;
   id: Scalars["ID"]["output"];
   isActive?: Maybe<Scalars["Boolean"]["output"]>;
-  patient: Patient;
+  patient?: Maybe<Patient>;
   patientId?: Maybe<Scalars["Float"]["output"]>;
   price?: Maybe<Scalars["Float"]["output"]>;
   schedule?: Maybe<Schedule>;
+  scheduleId?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
   transactionId?: Maybe<Scalars["String"]["output"]>;
@@ -86,6 +89,7 @@ export type AppointmentAggregateFilter = {
   or?: InputMaybe<Array<AppointmentAggregateFilter>>;
   patientId?: InputMaybe<NumberFieldComparison>;
   price?: InputMaybe<NumberFieldComparison>;
+  scheduleId?: InputMaybe<NumberFieldComparison>;
   scheduleTime?: InputMaybe<DateFieldComparison>;
   status?: InputMaybe<StringFieldComparison>;
   transactionId?: InputMaybe<StringFieldComparison>;
@@ -104,6 +108,7 @@ export type AppointmentAggregateGroupBy = {
   isActive?: Maybe<Scalars["Boolean"]["output"]>;
   patientId?: Maybe<Scalars["Float"]["output"]>;
   price?: Maybe<Scalars["Float"]["output"]>;
+  scheduleId?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
   transactionId?: Maybe<Scalars["String"]["output"]>;
@@ -144,6 +149,7 @@ export type AppointmentAvgAggregate = {
   id?: Maybe<Scalars["Float"]["output"]>;
   patientId?: Maybe<Scalars["Float"]["output"]>;
   price?: Maybe<Scalars["Float"]["output"]>;
+  scheduleId?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type AppointmentConnection = {
@@ -168,6 +174,7 @@ export type AppointmentCountAggregate = {
   isActive?: Maybe<Scalars["Int"]["output"]>;
   patientId?: Maybe<Scalars["Int"]["output"]>;
   price?: Maybe<Scalars["Int"]["output"]>;
+  scheduleId?: Maybe<Scalars["Int"]["output"]>;
   scheduleTime?: Maybe<Scalars["Int"]["output"]>;
   status?: Maybe<Scalars["Int"]["output"]>;
   transactionId?: Maybe<Scalars["Int"]["output"]>;
@@ -187,9 +194,11 @@ export type AppointmentFilter = {
   appointmentType?: InputMaybe<StringFieldComparison>;
   createdAt?: InputMaybe<DateFieldComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
+  department?: InputMaybe<AppointmentFilterDepartmentFilter>;
   departmentId?: InputMaybe<NumberFieldComparison>;
   doctor?: InputMaybe<AppointmentFilterDoctorFilter>;
   doctorId?: InputMaybe<NumberFieldComparison>;
+  healthProvider?: InputMaybe<AppointmentFilterHealthProviderFilter>;
   healthProviderId?: InputMaybe<NumberFieldComparison>;
   id?: InputMaybe<IdFilterComparison>;
   isActive?: InputMaybe<BooleanFieldComparison>;
@@ -198,9 +207,22 @@ export type AppointmentFilter = {
   patientId?: InputMaybe<NumberFieldComparison>;
   price?: InputMaybe<NumberFieldComparison>;
   schedule?: InputMaybe<AppointmentFilterScheduleFilter>;
+  scheduleId?: InputMaybe<NumberFieldComparison>;
   scheduleTime?: InputMaybe<DateFieldComparison>;
   status?: InputMaybe<StringFieldComparison>;
   transactionId?: InputMaybe<StringFieldComparison>;
+  updatedAt?: InputMaybe<DateFieldComparison>;
+};
+
+export type AppointmentFilterDepartmentFilter = {
+  and?: InputMaybe<Array<AppointmentFilterDepartmentFilter>>;
+  code?: InputMaybe<StringFieldComparison>;
+  createdAt?: InputMaybe<DateFieldComparison>;
+  deletedAt?: InputMaybe<DateFieldComparison>;
+  description?: InputMaybe<StringFieldComparison>;
+  id?: InputMaybe<IdFilterComparison>;
+  name?: InputMaybe<StringFieldComparison>;
+  or?: InputMaybe<Array<AppointmentFilterDepartmentFilter>>;
   updatedAt?: InputMaybe<DateFieldComparison>;
 };
 
@@ -220,6 +242,20 @@ export type AppointmentFilterDoctorFilter = {
   updatedAt?: InputMaybe<DateFieldComparison>;
   uploadId?: InputMaybe<IntFieldComparison>;
   userProfileId?: InputMaybe<NumberFieldComparison>;
+};
+
+export type AppointmentFilterHealthProviderFilter = {
+  and?: InputMaybe<Array<AppointmentFilterHealthProviderFilter>>;
+  createdAt?: InputMaybe<DateFieldComparison>;
+  deletedAt?: InputMaybe<DateFieldComparison>;
+  description?: InputMaybe<StringFieldComparison>;
+  district?: InputMaybe<StringFieldComparison>;
+  id?: InputMaybe<IdFilterComparison>;
+  name?: InputMaybe<StringFieldComparison>;
+  or?: InputMaybe<Array<AppointmentFilterHealthProviderFilter>>;
+  region?: InputMaybe<StringFieldComparison>;
+  type?: InputMaybe<StringFieldComparison>;
+  updatedAt?: InputMaybe<DateFieldComparison>;
 };
 
 export type AppointmentFilterPatientFilter = {
@@ -257,6 +293,7 @@ export type AppointmentMaxAggregate = {
   id?: Maybe<Scalars["ID"]["output"]>;
   patientId?: Maybe<Scalars["Float"]["output"]>;
   price?: Maybe<Scalars["Float"]["output"]>;
+  scheduleId?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
   transactionId?: Maybe<Scalars["String"]["output"]>;
@@ -274,6 +311,7 @@ export type AppointmentMinAggregate = {
   id?: Maybe<Scalars["ID"]["output"]>;
   patientId?: Maybe<Scalars["Float"]["output"]>;
   price?: Maybe<Scalars["Float"]["output"]>;
+  scheduleId?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
   transactionId?: Maybe<Scalars["String"]["output"]>;
@@ -297,6 +335,7 @@ export enum AppointmentSortFields {
   IsActive = "isActive",
   PatientId = "patientId",
   Price = "price",
+  ScheduleId = "scheduleId",
   ScheduleTime = "scheduleTime",
   Status = "status",
   TransactionId = "transactionId",
@@ -311,6 +350,7 @@ export type AppointmentSumAggregate = {
   id?: Maybe<Scalars["Float"]["output"]>;
   patientId?: Maybe<Scalars["Float"]["output"]>;
   price?: Maybe<Scalars["Float"]["output"]>;
+  scheduleId?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type AssignCategoryTypeDto = {
@@ -2077,6 +2117,7 @@ export type PatientAppointmentsAggregateGroupBy = {
   isActive?: Maybe<Scalars["Boolean"]["output"]>;
   patientId?: Maybe<Scalars["Float"]["output"]>;
   price?: Maybe<Scalars["Float"]["output"]>;
+  scheduleId?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
   transactionId?: Maybe<Scalars["String"]["output"]>;
@@ -2101,6 +2142,7 @@ export type PatientAppointmentsAvgAggregate = {
   id?: Maybe<Scalars["Float"]["output"]>;
   patientId?: Maybe<Scalars["Float"]["output"]>;
   price?: Maybe<Scalars["Float"]["output"]>;
+  scheduleId?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type PatientAppointmentsConnection = {
@@ -2125,6 +2167,7 @@ export type PatientAppointmentsCountAggregate = {
   isActive?: Maybe<Scalars["Int"]["output"]>;
   patientId?: Maybe<Scalars["Int"]["output"]>;
   price?: Maybe<Scalars["Int"]["output"]>;
+  scheduleId?: Maybe<Scalars["Int"]["output"]>;
   scheduleTime?: Maybe<Scalars["Int"]["output"]>;
   status?: Maybe<Scalars["Int"]["output"]>;
   transactionId?: Maybe<Scalars["Int"]["output"]>;
@@ -2142,6 +2185,7 @@ export type PatientAppointmentsMaxAggregate = {
   id?: Maybe<Scalars["ID"]["output"]>;
   patientId?: Maybe<Scalars["Float"]["output"]>;
   price?: Maybe<Scalars["Float"]["output"]>;
+  scheduleId?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
   transactionId?: Maybe<Scalars["String"]["output"]>;
@@ -2159,6 +2203,7 @@ export type PatientAppointmentsMinAggregate = {
   id?: Maybe<Scalars["ID"]["output"]>;
   patientId?: Maybe<Scalars["Float"]["output"]>;
   price?: Maybe<Scalars["Float"]["output"]>;
+  scheduleId?: Maybe<Scalars["Float"]["output"]>;
   scheduleTime?: Maybe<Scalars["DateTime"]["output"]>;
   status?: Maybe<Scalars["String"]["output"]>;
   transactionId?: Maybe<Scalars["String"]["output"]>;
@@ -2173,6 +2218,7 @@ export type PatientAppointmentsSumAggregate = {
   id?: Maybe<Scalars["Float"]["output"]>;
   patientId?: Maybe<Scalars["Float"]["output"]>;
   price?: Maybe<Scalars["Float"]["output"]>;
+  scheduleId?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type PatientAvgAggregate = {
@@ -2798,6 +2844,8 @@ export type RateDoctorDto = {
 
 export type Schedule = {
   __typename?: "Schedule";
+  appointments?: Maybe<Appointment>;
+  bookedSlots: Array<Appointment>;
   createdAt?: Maybe<Scalars["DateTime"]["output"]>;
   dayOfWeek: DaysOfWeek;
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
@@ -2855,6 +2903,7 @@ export type ScheduleEdge = {
 
 export type ScheduleFilter = {
   and?: InputMaybe<Array<ScheduleFilter>>;
+  appointments?: InputMaybe<ScheduleFilterAppointmentFilter>;
   createdAt?: InputMaybe<DateFieldComparison>;
   dayOfWeek?: InputMaybe<DaysOfWeekFilterComparison>;
   deletedAt?: InputMaybe<DateFieldComparison>;
@@ -2865,6 +2914,26 @@ export type ScheduleFilter = {
   isFull?: InputMaybe<BooleanFieldComparison>;
   or?: InputMaybe<Array<ScheduleFilter>>;
   startTime?: InputMaybe<StringFieldComparison>;
+  updatedAt?: InputMaybe<DateFieldComparison>;
+};
+
+export type ScheduleFilterAppointmentFilter = {
+  and?: InputMaybe<Array<ScheduleFilterAppointmentFilter>>;
+  appointmentType?: InputMaybe<StringFieldComparison>;
+  createdAt?: InputMaybe<DateFieldComparison>;
+  deletedAt?: InputMaybe<DateFieldComparison>;
+  departmentId?: InputMaybe<NumberFieldComparison>;
+  doctorId?: InputMaybe<NumberFieldComparison>;
+  healthProviderId?: InputMaybe<NumberFieldComparison>;
+  id?: InputMaybe<IdFilterComparison>;
+  isActive?: InputMaybe<BooleanFieldComparison>;
+  or?: InputMaybe<Array<ScheduleFilterAppointmentFilter>>;
+  patientId?: InputMaybe<NumberFieldComparison>;
+  price?: InputMaybe<NumberFieldComparison>;
+  scheduleId?: InputMaybe<NumberFieldComparison>;
+  scheduleTime?: InputMaybe<DateFieldComparison>;
+  status?: InputMaybe<StringFieldComparison>;
+  transactionId?: InputMaybe<StringFieldComparison>;
   updatedAt?: InputMaybe<DateFieldComparison>;
 };
 
@@ -3137,6 +3206,7 @@ export type TransactionFilterAppointmentFilter = {
   or?: InputMaybe<Array<TransactionFilterAppointmentFilter>>;
   patientId?: InputMaybe<NumberFieldComparison>;
   price?: InputMaybe<NumberFieldComparison>;
+  scheduleId?: InputMaybe<NumberFieldComparison>;
   scheduleTime?: InputMaybe<DateFieldComparison>;
   status?: InputMaybe<StringFieldComparison>;
   transactionId?: InputMaybe<StringFieldComparison>;
@@ -3631,6 +3701,22 @@ export type ProvidersMutation = {
   };
 };
 
+export type AssignDepartmentToProviderMutationVariables = Exact<{
+  input: AssignDepartmentToProviderDto;
+}>;
+
+export type AssignDepartmentToProviderMutation = {
+  __typename?: "Mutation";
+  assignDepartmentToProvider: {
+    __typename?: "HealthProvider";
+    id: string;
+    name?: string | null;
+    region?: string | null;
+    type?: string | null;
+    district?: string | null;
+  };
+};
+
 export type CreateDepartmentMutationVariables = Exact<{
   input: CreateOneDepartmentInput;
 }>;
@@ -3977,6 +4063,44 @@ export const useProvidersMutation = <TError = unknown, TContext = unknown>(
         variables,
         headers
       )(),
+    options
+  );
+export const AssignDepartmentToProviderDocument = `
+    mutation AssignDepartmentToProvider($input: AssignDepartmentToProviderDto!) {
+  assignDepartmentToProvider(input: $input) {
+    id
+    name
+    region
+    type
+    district
+  }
+}
+    `;
+export const useAssignDepartmentToProviderMutation = <
+  TError = unknown,
+  TContext = unknown
+>(
+  client: GraphQLClient,
+  options?: UseMutationOptions<
+    AssignDepartmentToProviderMutation,
+    TError,
+    AssignDepartmentToProviderMutationVariables,
+    TContext
+  >,
+  headers?: RequestInit["headers"]
+) =>
+  useMutation<
+    AssignDepartmentToProviderMutation,
+    TError,
+    AssignDepartmentToProviderMutationVariables,
+    TContext
+  >(
+    ["AssignDepartmentToProvider"],
+    (variables?: AssignDepartmentToProviderMutationVariables) =>
+      fetcher<
+        AssignDepartmentToProviderMutation,
+        AssignDepartmentToProviderMutationVariables
+      >(client, AssignDepartmentToProviderDocument, variables, headers)(),
     options
   );
 export const CreateDepartmentDocument = `
